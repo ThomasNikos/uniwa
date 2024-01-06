@@ -1,2 +1,2 @@
-# uniwa
+# Uniwa
 Projects at school.
