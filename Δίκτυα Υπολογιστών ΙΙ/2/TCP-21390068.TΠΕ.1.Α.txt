@@ -1,0 +1,106 @@
+/*
+Εργαστήριο Δίκτυα ΙΙ / TCP / 2022-23
+Ονοματεπώνυμο: Νικόλαος Θωμάς
+ΑΜ: 21390068
+Τμήμα: ΠΕ.1.Α
+*/
+
+Ερώτημα 1:
+
+Ο αριθμός σειράς/αλληλουχίας (sequence number) που χρησιμοποιείται για την
+έναρξη της TCP σύνδεσης μεταξύ του client PC και του server (gaia.cd.umass.edu)
+είναι το 0 ( Sequence number: 0 ). Το flag που ενεργοποιείται για να 
+ταυτοποιήσει το segment σαν SYN segment είναι το SYN;
+
+Ερώτημα 2:
+
+Ο αριθμός σειράς/αλληλουχίας (sequence number) του SYN-ACK segment που στέλνεται
+από τον server στον client σαν απάντηση στο SYN segment είναι ο αριθμός 0. 
+Η τιμή του ACKnowledged πεδίου στο SYN-ACK segment είναι 1. O server καθόρισε
+την τιμή αυτή βάση το sequence number που του στάλθηκε. Η τιμή του ACK είναι
+το sequence number που έλαβε ο server αυξημένος κατα 1 (0+1=1).Ενεργοποιούνται
+τα flags SYN και ACK.
+
+Ερώτημα 3:
+
+Ο αριθμός σειράς/αλληλουχίας (sequence number) του TCP segment που περιέχει
+την HTTP POST εντολή είναι ο αριθμός 1.
+
+Ερώτημα 4:
+
+Τα Sequence numbers τως 6 πρώτων segments και η ώρα αποστοής τους:
+
+Sequence Number: 1		Time since first frame int this TCP stream: 0.026477000 sec
+Sequence Number: 566	Time since first frame int this TCP stream: 0.041737000 sec
+Sequence Number: 2026	Time since first frame int this TCP stream: 0.054026000 sec
+Sequence Number: 3486	Time since first frame int this TCP stream: 0.054690000 sec
+Sequence Number: 4946	Time since first frame int this TCP stream: 0.077405000 sec
+Sequence Number: 6406	Time since first frame int this TCP stream: 0.078157000 sec
+
+Χρόνος παραλαβής ACK segment για κάθε ένα απο τα παραπάνω 6 με την σειρά:
+
+ACKnowledged Number: 566	Time since first frame int this TCP stream: 0.053937000 sec
+ACKnowledged Number: 2026	Time since first frame int this TCP stream: 0.077294000 sec
+ACKnowledged Number: 3486	Time since first frame int this TCP stream: 0.124085000 sec
+ACKnowledged Number: 4946	Time since first frame int this TCP stream: 0.169118000 sec
+ACKnowledged Number: 6406	Time since first frame int this TCP stream: 0.217299000 sec
+ACKnowledged Number: 7866	Time since first frame int this TCP stream: 0.267802000 sec
+
+Τιμή Round Trip Time για κάθε ένα από τα 6 Segments:
+
+Round Trip Time: 0.053937000 - 0.026477000 = 0.02746 sec
+Round Trip Time: 0.077294000 - 0.041737000 = 0.035557 sec 
+Round Trip Time: 0.124085000 - 0.054026000 = 0.070059 sec
+Round Trip Time: 0.169118000 - 0.054690000 = 0.114428 sec
+Round Trip Time: 0.217299000 - 0.077405000 = 0.139894 sec
+Round Trip Time: 0.267802000 - 0.078157000 = 0.189645 sec
+
+Ερώτημα 5:
+
+Length (Len):
+
+1. 565
+2. 1460
+3. 1460
+4. 1460
+5. 1460
+6. 1460
+
+Ερώτημα 6:
+
+Είναι 5840 (Window Size Value).
+Όχι, αν γεμίσει ο αποστολέας πρέπει να περιμένει μέχρι να γίνει διαθέσιμος χώρος στο receiver buffer 
+πριν συνεχίσει την αποστολή περισσότερων δεδομένων. Το μόνο που έχει να κάνει ο αποστολέας είναι να 
+προσαρμόσει το ρυθμό της αποστολής του για να ταιριάζει με το διαθέσιμο χώρο στο receiver buffer.
+
+
+Ερώτημα 7:
+
+Χρησιμοποιώντας το φίλτρο "tcp.analysis.retransmission" παρατηρούμε ότι δεν ξαναστέλνονται segments.
+
+Ερώτημα 8:
+
+Το πεδίο "Acknowledgment Number" δηλώνει τον επόμενο αναμενόμενο αριθμό ακολουθίας (sequence number)
+που πρέπει να λάβει ο αποστολέας. Δηλαδή, το ACK number αναφέρεται στον αριθμό ακολουθίας του 
+επόμενου πακέτου που αναμένει ο παραλήπτης από τον αποστολέα εκτός και αν πρώτα λάβει ACK μεταγενέστερου
+segment (cumulative ack) που ταυτόχρονα επιβεβαιώνει και τα προηγούμενα segment παρόλο που δεν έλαβε και 
+για αυτά ACK. Μία τέτοια περίπτωση είναι η 87. με ACK = 61085, όπου φένεται πως δεν έχει πάρει ACK για το 81,82
+και πρώτα παίρνει για το 83. Οπότε επιβεβαιώνονται και τα 81,82.
+
+Ερώτημα 9:
+
+Η ρυθμαπόδοση της TCP σύνδεσης είναι τα συνολικά bytes (Total Bytes - TB) που μεταφέρθηκαν προς τον συνολικό χρόνο
+μετάδοσης (Total Transmission Time - TTT).
+
+TB = 164090 bytes
+TTT = 5.297341000 - 0.026477000 = 5.270864 sec.
+Ρυθμαπόδοση = TB/TTT = 164090/5.270864 = 31.1315185 kBps
+
+Ερώτημα 10:
+
+
+SlowStart Phase : Starts at -> Sequence Number : 0 
+				  Ends at -> Sequence Number : 7866
+
+Congestion Avoidance Phase :  Starts at -> Sequence Number : >7866
+							  Ends at -> Sequence Number : 58165
