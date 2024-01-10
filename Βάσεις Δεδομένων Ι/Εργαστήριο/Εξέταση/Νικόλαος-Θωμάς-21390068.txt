@@ -1,0 +1,26 @@
+-- Ερώτημα 1.
+
+SELECT JOB AS "Επάγγελμα",
+AVG(SAL) AS "Μ.Ο. Μισθού",
+SUM(SAL+IFNULL(COMM,0)) AS "Σύνολο Αποδοχών",
+COUNT(EMPNO) AS "Σύνολο Εργαζομένων"
+FROM EMP
+GROUP BY JOB;
+
+-- Ερώτημα 2.
+
+SELECT JOB AS "Επάγγελμα",
+AVG(SAL) AS "Μ.Ο. Μισθού",
+SUM(SAL+IFNULL(COMM,0)) AS "Σύνολο Αποδοχών",
+COUNT(EMPNO) AS "Σύνολο Εργαζομένων"
+FROM EMP
+GROUP BY JOB
+HAVING COUNT(EMPNO)>= 2;
+
+-- Ερώτημα 3.
+
+INSERT INTO PROJ VALUES(400,’UNIWA’);
+INSERT INTO ASSIGN VALUE(10,400,2);
+INSERT INTO ASSIGN VALUE(15,400,2);
+INSERT INTO ASSIGN VALUE(20,400,2);
+INSERT INTO ASSIGN VALUE(30,400,2);
