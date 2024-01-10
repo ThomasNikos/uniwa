@@ -1,0 +1,48 @@
+#!/bin/bash
+
+if [ $# -ne 2 ]; then
+    echo "Not enough arguements." >&2
+    exit 1
+fi
+re='^[0-9]+$'
+if ! [[ $1 =~ $re ]]; then
+    echo "Not an integer." >&2
+    exit 2
+fi
+if ! [[ $2 =~ $re ]]; then
+    echo "Not an integer." >&2
+    exit 3
+fi
+name="test"
+while [ $name != "exit" ]
+do
+echo "Give name of a directory: (Type exit if you want to leave)"
+read name
+    if [ $name == "exit" ]; then
+        echo All Files Found:
+        echo -e 1. $a"\n"2. $b"\n"3. $c"\n"4. $d"\n"5. $e
+        exit 0
+    fi
+    if [ ! -d $name ]; then
+        echo -e "Not a directory\n"
+        echo All Files Found:
+        echo -e 1. $a"\n"2. $b"\n"3. $c"\n"4. $d"\n"5. $e
+        exit 4
+    fi
+    echo "Files with permissions $1: "
+    find $name -perm $1
+    a=$(($a+$(find $name -perm $1 | wc -l)))
+    echo "Files modifidied in last $2 days: "
+    find $name -mtime -$2
+    b=$(($b+$(    find $name -mtime -$2 | wc -l)))
+    echo "Directories accessed in last $2 days: "
+    find $name -type d -atime -$2
+    c=$(($c+$(find $name -type d -atime -$2 | wc -l)))
+    echo "Files all users have permission to read: "
+    ls -l $name | grep "^.r..r..r.."
+    d=$(($d+$(ls -l $name | grep "^.r..r..r.." | wc -l)))
+    echo "Directories everyone can make changes (create/rename/delete files): "
+    ls -l $name | grep "^drwxrwxrwx"
+    e=$(($e+$(ls -l $name | grep "^drwxrwxrwx" | wc -l)))
+    echo ""
+done
