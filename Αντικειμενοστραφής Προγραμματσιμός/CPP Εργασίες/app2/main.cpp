@@ -1,0 +1,24 @@
+#include "student.h"
+
+using namespace std;
+
+int main() {
+	int ans;
+	char AM[15] = "21390068";
+	Student stud("Νικόλαος Θωμάς", AM); //Constructor με default εξάμηνο 1.
+	char AMS[15] = "2121212121";
+	Student studs("Τυχαίο Όνομα", AMS, 2); //Constructor με 2ο εξάμηνο για παράμετρο.
+	Student s1 = stud; // Copy constructor.
+	stud.id(); //Εμφάνιση ονόματος, ΑΜ και εξαμήνου.
+	studs.id(); //Εμφάνιση ονόματος, ΑΜ και εξαμήνου.
+	s1.id(); //Εμφάνιση ονόματος, ΑΜ και εξαμήνου.
+	cout << "Αύξηση εξαμήνου κατα 1:"  << endl;
+	stud.sem_plus(); //Αύξηση εξαμήνου κατα 1.
+	stud.id(); //Εμφάνιση ονόματος, ΑΜ και εξαμήνου.
+	studs.sem_plus(); //Αύξηση εξαμήνου κατα 1.
+	studs.id(); //Εμφάνιση ονόματος, ΑΜ και εξαμήνου.
+	s1.sem_plus(); //Αύξηση εξαμήνου κατα 1.
+	s1.id(); //Εμφάνιση ονόματος, ΑΜ και εξαμήνου.
+	return 0;
+}
+
