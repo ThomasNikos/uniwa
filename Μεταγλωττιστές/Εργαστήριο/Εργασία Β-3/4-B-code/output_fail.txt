@@ -1,0 +1,77 @@
+	Line 3 at lexeme '
+' : syntax error
+	Line 6 at lexeme '
+' : syntax error
+	Line 10 at lexeme 'Î' : Unrecognized character(s) encountered!
+		12 character(s) ignored so far
+	Line 12 at lexeme '5' : syntax error
+	Line 13 at lexeme '.' : Unrecognized character(s) encountered!
+		15 character(s) ignored so far
+	Line 15 at lexeme '{' : syntax error
+	Line 17 at lexeme ''' : Unrecognized character(s) encountered!
+		19 character(s) ignored so far
+	Line 17 at lexeme ''' : Unrecognized character(s) encountered!
+		23 character(s) ignored so far
+	Line 17 at lexeme ''' : Unrecognized character(s) encountered!
+		27 character(s) ignored so far
+	Line 17 at lexeme ''' : Unrecognized character(s) encountered!
+		32 character(s) ignored so far
+	Line 19 at lexeme '17' : syntax error
+	Line 21 at lexeme '"' : Unrecognized character(s) encountered!
+		39 character(s) ignored so far
+	Line 21 at lexeme '!' : syntax error
+	Line 23 at lexeme '123' : syntax error
+	Line 25 at lexeme '"' : Unrecognized character(s) encountered!
+		45 character(s) ignored so far
+	Line 25 at lexeme ':' : Unrecognized character(s) encountered!
+		46 character(s) ignored so far
+	Line 25 at lexeme ')' : syntax error
+	Line 28 at lexeme '(' : syntax error
+	Line 31 at lexeme 'b' : syntax error
+	Line 34 at lexeme '}' : syntax error
+	Line 36 at lexeme '{' : syntax error
+	Line 38 at lexeme '}' : syntax error
+	Line 42 at lexeme '
+' : syntax error
+	Line 43 at lexeme 'else' : syntax error
+	Line 45 at lexeme '}' : syntax error
+	Line 47 at lexeme 'int' : syntax error
+	Line 49 at lexeme '}' : syntax error
+	Line 54 at lexeme 'a' : syntax error
+	Line 55 at lexeme '}' : syntax error
+	Line 57 at lexeme ';' : syntax error
+	Line 59 at lexeme 'bigger' : syntax error
+	Line 59 at lexeme '"' : Unrecognized character(s) encountered!
+		49 character(s) ignored so far
+	Line 63 at lexeme '
+' : syntax error
+	Line 63 at lexeme '&&' : syntax error
+	Line 66 at lexeme '|' : Unrecognized character(s) encountered!
+		50 character(s) ignored so far
+	Line 66 at lexeme 'temperature' : syntax error
+	Line 68 at lexeme '"WRITE A REALISTIC NUMBER!\n"' : syntax error
+	Line 70 at lexeme '}' : syntax error
+	Line 72 at lexeme 'return' : syntax error
+	Line 74 at lexeme 'a' : syntax error
+	Line 78 at lexeme '}' : syntax error
+	Line 79 at lexeme ')' : syntax error
+	Line 81 at lexeme '}' : syntax error
+	Line 83 at lexeme '1.2' : syntax error
+	Line 85 at lexeme '-' : syntax error
+	Line 87 at lexeme '==' : syntax error
+	Line 89 at lexeme 'void' : syntax error
+	Line 91 at lexeme '*' : syntax error
+	Line 93 at lexeme '=' : syntax error
+	Line 94 at lexeme '&' : syntax error
+	Line 95 at lexeme ')' : syntax error
+	Line 97 at lexeme 'd' : syntax error
+	Line 99 at lexeme ';' : syntax error
+	Line 101 at lexeme '4' : syntax error
+	Line 103 at lexeme ',' : syntax error
+	Line 105 at lexeme '"aaaa"' : syntax error
+	Line 107 at lexeme '/' : syntax error
+
+Correct Words: 208
+Correct Expressions: 6
+Wrong Words: 11
+Wrong Expressions: 46

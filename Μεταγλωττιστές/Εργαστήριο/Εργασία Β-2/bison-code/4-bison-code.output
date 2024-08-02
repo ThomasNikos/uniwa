@@ -1,0 +1,106 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: program expr NEWLINE
+    2        | /* empty */
+
+    3 expr: INTCONST
+    4     | VARIABLE
+    5     | expr PLUS expr
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+INTCONST (258) 3
+VARIABLE (259) 4
+PLUS (260) 5
+NEWLINE (261) 1
+
+
+Nonterminals, with rules where they appear
+
+$accept (7)
+    on left: 0
+program (8)
+    on left: 1 2, on right: 0 1
+expr (9)
+    on left: 3 4 5, on right: 1 5
+
+
+state 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 2 (program)
+
+    program  go to state 1
+
+
+state 1
+
+    0 $accept: program . $end
+    1 program: program . expr NEWLINE
+
+    $end      shift, and go to state 2
+    INTCONST  shift, and go to state 3
+    VARIABLE  shift, and go to state 4
+
+    expr  go to state 5
+
+
+state 2
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 3
+
+    3 expr: INTCONST .
+
+    $default  reduce using rule 3 (expr)
+
+
+state 4
+
+    4 expr: VARIABLE .
+
+    $default  reduce using rule 4 (expr)
+
+
+state 5
+
+    1 program: program expr . NEWLINE
+    5 expr: expr . PLUS expr
+
+    PLUS     shift, and go to state 6
+    NEWLINE  shift, and go to state 7
+
+
+state 6
+
+    5 expr: expr PLUS . expr
+
+    INTCONST  shift, and go to state 3
+    VARIABLE  shift, and go to state 4
+
+    expr  go to state 8
+
+
+state 7
+
+    1 program: program expr NEWLINE .
+
+    $default  reduce using rule 1 (program)
+
+
+state 8
+
+    5 expr: expr . PLUS expr
+    5     | expr PLUS expr .
+
+    $default  reduce using rule 5 (expr)

@@ -1,0 +1,66 @@
+double A;
+
+scan (message);
+
+len("How long is this")
+
+print(len("How long is this"));
+
+func number(int num){
+	print("num : ", num)
+}
+
+number(19);
+
+
+x = 5000;
+
+BIGGER > smaller
+
+if (x > 1000) print ("This is right !")
+
+int i=0
+while (i<2){
+	print ("i=", i);
+	i += 1;
+}
+
+int i;
+for (i = 0; i < 5; i++){
+	print("GOOD EVENING")
+}
+
+
+
+
+print("HELLO");
+
+cmp(a, b);
+
+int A;
+
+scan(x1);
+
+len("string");
+
+x2 = 20;
+
+n1 > n2;
+
+func myfunc(char name)
+{
+	print("My name is ", name);
+}
+myfunc("George");
+
+int i;
+for (i=0; i<50; i++)
+{
+	print("Your position is : ", i);
+}
+
+int i=100;
+while (i>=20);
+{
+	print("Big Number");
+}

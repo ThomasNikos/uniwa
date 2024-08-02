@@ -1,0 +1,64 @@
+Name
+Name123
+Name_123
+_name123
+Name_1_END
+name@email
+name_123!23
+name.123
+name\123
+123_name
+"Test"
+"Example using \"Quotes!\""
+"Newline \n"
+" "
+"example with   tab and different characters %$#^&*"
+"This is an example with \"
+"Trying two strings in one line""This is another string" 
+"Using space character after closing the string" 
+"something" something "something"
+"Wrong input
+0
+214748
+0x4F
+0XFF42
+0147
+029123
+0xG123
+0XX15
+055X3
+0x
+3.14
+14e1.2
+0e-1.2
+0e0
+3.1e1
+.10
+e22
+3-
+1.10.10
+0e
+continue
+long
+break
+struct
+switch
+1 + 2 = 3
+10 - 4 = 6
+13 * 4 =5 2
+10 ! = 3628800
+55 / 5 = 11
+// comments
+/*comments*/
+/**/
+/* comments */ test
+//
+/*comment
+with enter
+*/
+
+     
+check !
+This is a sentence with spaces!
+Ok, now tab		!
+Seperating ; words ; with ; space semi colon and      tab         ;

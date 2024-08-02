@@ -1,0 +1,12 @@
+START=S11
+S11:	/	->	S12
+	*	->	BAD
+S12:	/	->	S13
+	*	->	BAD
+S13:	/	->	S14
+	*	->	S13
+S14:	/	->	GOOD
+	*	->	S13
+GOOD(OK): \n	->	GOOD
+
+

@@ -1,0 +1,140 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int summary(int varA , int varB){
+    printf("\nSummary = %d" , varA + varB);
+}
+
+int substraction(int varA , int varB){
+    printf("\nSubstraction = %d" , varA - varB);
+}
+
+int multiply(int varA , int varB){
+    printf("\nMultiply = %d" , varA * varB);
+}
+
+int division(int varA , int varB){
+    printf("\nDivision(x/y) = %d" , varA / varB);
+    printf("\nDivision(y/x) = %d" , varB / varA);
+}
+
+void concat(int A[], int sizeA, int B[], int sizeB, int C[]){
+    for(int i = 0; i < sizeA; i++){
+        C[i] = A[i];
+    }
+    for(int i = 0; i < sizeB; i++){
+        C[sizeA + i] = B[i];
+    }
+}
+
+int main(int argc, char *argv[]){
+	int x;
+    int y;
+    int z,a;
+    int result_cmp;
+	printf("type x:");
+	scanf("%d",&x);
+
+	printf("type y:");
+	scanf("%d",&y);
+
+    summary(x,y);
+	substraction(x,y);
+    multiply(x,y);
+    division(x,y);
+    printf("\n");
+
+    char word1[50];
+    printf("type a word now : ");
+    scanf("%s", &word1);
+    printf("\nThe length of word is : %zu \n", strlen(word1));
+
+    char word2[50];
+    printf("\ntype another word : ");
+    scanf("%s", &word2);
+    result_cmp= strcmp(word1,word2);
+
+    if(result_cmp == 0){
+        printf("The words are equal\n");
+    }
+    else if(result_cmp > 0){
+        printf("%s is greater than %s\n", word1, word2);
+    }
+    else{
+        printf("%s is less than %s\n", word1, word2);
+    }
+
+    int i=0;
+    z=2;
+    a=1;
+    while(i < 3){
+        z=((10-x)/y )* a;
+        printf( "\nNumber Z : %d", z);
+        a*=(-1);
+        i ++ ;
+    }
+    printf("\n\n");
+
+    int A [2] = {17, 22};
+    int B [4] = {31, 56, 87, 102};
+    int sizeA=sizeof(A)/sizeof(A[0]);
+    int sizeB=sizeof(B)/sizeof(B[0]);
+    int C[6];
+    concat(A,sizeA,B,sizeB,C);
+
+    printf("The array C contains : \n");
+    for(i=0; i<6; i++){
+        printf("%d  ", C[i]);
+    }
+
+    printf("\n");
+
+    if(x>y && y>2 && x>4){
+        printf("\nX is bigger than Y, X>4 and Y>2!!!!!\n");
+    }
+    else{
+        printf("\nX isn't bigger than Y or X>4 or Y>2!!!!!\n");
+    }
+
+    int century, day, month, year;
+    float temperature;
+    printf("\ntype a century: ");
+    scanf("%d", &century);
+    printf("type a day: ");
+    scanf("%d", &day);
+    while(day<1 || day>31){
+        printf("WRONG DAY! TRY AGAIN!\n");
+        scanf("%d", &day);
+    }
+    printf("type a month: ");
+    scanf("%d", &month);
+    while(month<1 || month>12){
+        printf("WRONG MONTH! TRY AGAIN!\n");
+        scanf("%d", &month);
+    }
+    printf("type a year: ");
+    scanf("%d", &year);
+    while(year<1000){
+        printf("TOO OLD! TRY AGAIN!\n");
+        scanf("%d", &year);
+    }
+    printf("type a temperature: ");
+    scanf("%f",&temperature);
+    while(temperature < -10 || temperature>45){
+        printf("WRITE A REALISTIC NUMBER!\n");
+        scanf("%f", &temperature);
+    }
+
+    if(century>20 && day<=5 \
+        && month>=3 && year==2024 \
+        && temperature>=25){
+                printf("\nToday is %d/%d/%d \n\n", day, month, year);
+                if(temperature>=20){
+                    printf("Weather temperature in Greece is HIGH!\n");
+                }
+    }
+
+    printf("------------------------------");
+	return 0;
+}

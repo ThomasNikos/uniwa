@@ -1,0 +1,9 @@
+Το αρχέιο Makefile περιέχει τις απαράιτητες εντολές για την εκτέλεση σε Linux και Windows.
+Οι εντολές εκτέλεσης σε Windows είναι υπό μορφή σχολίου που δεν εμφανίζεται γράφοντας make.
+Στην περίπτωση που θέλετε να εκτελέσετε τα προγράμματα σε Windows, 
+αφεραίστε τα σύμβολα @# μπροστά απο τις γραμμές:
+4-bison-code input_success.txt output_success.txt και
+4-bison-code input_fail.txt output_fail.txt. 
+Προσθέστε σε σχόλιο, με το σύμβολο # τις γραμμές:
+./4-bison-code input_success.txt output_success.txt και 
+./4-bison-code input_fail.txt output_fail.txt .

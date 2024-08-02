@@ -1,0 +1,9 @@
+START=SO
+SO:		A-Z a-z _	-> 	S1
+		*			-> 	BAD
+S1:		0-9			-> 	S2
+		*			-> 	BAD
+S2:		\s\t\n		->	
+		*			->
+		
+GOOD(OK): \n	->	GOOD

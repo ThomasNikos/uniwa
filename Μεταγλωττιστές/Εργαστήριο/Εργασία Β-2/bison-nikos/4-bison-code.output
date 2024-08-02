@@ -1,0 +1,2009 @@
+Terminals unused in grammar
+
+   DELIMITER
+   KEYWORD
+   COMMENT
+   UNKNOWN_TOKEN
+
+
+State 65 conflicts: 1 shift/reduce
+State 66 conflicts: 1 shift/reduce
+State 87 conflicts: 2 reduce/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: /* empty */
+    2        | program NEWLINE
+    3        | program expr
+
+    4 number: INTEGER
+    5       | FLOAT
+    6       | ARITH_OPERATOR number
+
+    7 term: IDENTIFIER
+    8     | number
+    9     | IDENTIFIER ARRAY
+
+   10 multiple_term: term
+   11              | term COMMA term
+
+   12 string: STRING
+   13       | string COMMA STRING
+
+   14 print_func: PRINT LEFT_PT string RIGHT_PT
+   15           | PRINT LEFT_PT variable_list RIGHT_PT
+   16           | PRINT LEFT_PT multiple_expressions_no_semi RIGHT_PT
+   17           | PRINT LEFT_PT STRING COMMA IDENTIFIER RIGHT_PT
+   18           | PRINT LEFT_PT STRING COMMA expr_no_semi RIGHT_PT
+   19           | PRINT LEFT_PT IDENTIFIER RIGHT_PT
+   20           | PRINT LEFT_PT IDENTIFIER ARRAY RIGHT_PT
+
+   21 declaration: TYPE IDENTIFIER
+
+   22 assignment: variable_list ASSIGNOP expr_no_semi
+   23           | variable_list ASSIGNOP multiple_term
+   24           | variable_list ASSIGNOP variable_list
+
+   25 multiple_expressions: expr
+   26                     | multiple_expressions expr
+
+   27 multiple_expressions_no_semi: expr_no_semi
+   28                             | multiple_expressions_no_semi COMMA expr_no_semi
+
+   29 variable_list: IDENTIFIER
+   30              | variable_list COMMA IDENTIFIER
+
+   31 scan_func: SCAN LEFT_PT IDENTIFIER RIGHT_PT
+
+   32 len_func: LEN LEFT_PT STRING RIGHT_PT
+   33         | LEN LEFT_PT ARRAY RIGHT_PT
+   34         | LEN LEFT_PT IDENTIFIER RIGHT_PT
+
+   35 cmp_func: CMP LEFT_PT STRING COMMA STRING RIGHT_PT
+   36         | CMP LEFT_PT IDENTIFIER COMMA IDENTIFIER RIGHT_PT
+   37         | CMP LEFT_PT STRING COMMA IDENTIFIER RIGHT_PT
+   38         | CMP LEFT_PT IDENTIFIER COMMA STRING RIGHT_PT
+   39         | CMP LEFT_PT number COMMA number RIGHT_PT
+
+   40 func_def: FUNC IDENTIFIER LEFT_PT TYPE IDENTIFIER COMMA TYPE IDENTIFIER RIGHT_PT LEFT_BR RIGHT_BR
+
+   41 func_call: IDENTIFIER LEFT_PT term COMMA term RIGHT_PT
+
+   42 cmp_operator: term CMP_OPERATOR term
+
+   43 cmp_operator_multiple: cmp_operator
+   44                      | cmp_operator CMP_OPERATOR term
+   45                      | cmp_operator CMP_OPERATOR cmp_operator_multiple
+
+   46 arith_operation: term ARITH_OPERATOR term
+
+   47 if_func: IF LEFT_PT cmp_operator_multiple RIGHT_PT expr_no_semi
+   48        | IF LEFT_PT cmp_operator_multiple RIGHT_PT LEFT_BR multiple_expressions RIGHT_BR
+
+   49 while_func: WHILE LEFT_PT cmp_operator_multiple RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+   50 for_func: FOR LEFT_PT assignment SEMICOLON cmp_operator_multiple SEMICOLON plus_minus RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+   51 plus_minus: DOUBLE_PLUS term
+   52           | DOUBLE_MINUS term
+   53           | term DOUBLE_PLUS
+   54           | term DOUBLE_MINUS
+
+   55 array: ARRAY
+   56      | ARRAY ARITH_OPERATOR ARRAY
+
+   57 expr_no_semi: scan_func
+   58             | len_func
+   59             | print_func
+   60             | cmp_func
+   61             | declaration
+   62             | cmp_operator_multiple
+   63             | if_func
+   64             | NEWLINE
+
+   65 expr: expr_no_semi SEMICOLON
+   66     | assignment SEMICOLON
+   67     | func_def SEMICOLON
+   68     | func_call SEMICOLON
+   69     | arith_operation SEMICOLON
+   70     | array SEMICOLON
+   71     | while_func
+   72     | for_func
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+DELIMITER (258)
+IDENTIFIER (259) 7 9 17 19 20 21 29 30 31 34 36 37 38 40 41
+KEYWORD (260)
+STRING (261) 12 13 17 18 32 35 37 38
+INTEGER (262) 4
+FLOAT (263) 5
+ARITH_OPERATOR (264) 6 46 56
+COMMENT (265)
+UNKNOWN_TOKEN (266)
+NEWLINE (267) 2 49 50 64
+ARRAY (268) 9 20 33 55 56
+PRINT (269) 14 15 16 17 18 19 20
+LEFT_PT (270) 14 15 16 17 18 19 20 31 32 33 34 35 36 37 38 39 40 41
+    47 48 49 50
+RIGHT_PT (271) 14 15 16 17 18 19 20 31 32 33 34 35 36 37 38 39 40 41
+    47 48 49 50
+SEMICOLON (272) 50 65 66 67 68 69 70
+ASSIGNOP (273) 22 23 24
+CMP_OPERATOR (274) 42 44 45
+TYPE (275) 21 40
+SCAN (276) 31
+LEN (277) 32 33 34
+CMP (278) 35 36 37 38 39
+COMMA (279) 11 13 17 18 28 30 35 36 37 38 39 40 41
+FUNC (280) 40
+LEFT_BR (281) 40 48 49 50
+RIGHT_BR (282) 40 48 49 50
+IF (283) 47 48
+WHILE (284) 49
+FOR (285) 50
+DOUBLE_PLUS (286) 51 53
+DOUBLE_MINUS (287) 52 54
+
+
+Nonterminals, with rules where they appear
+
+$accept (33)
+    on left: 0
+program (34)
+    on left: 1 2 3, on right: 0 2 3
+number (35)
+    on left: 4 5 6, on right: 6 8 39
+term (36)
+    on left: 7 8 9, on right: 10 11 41 42 44 46 51 52 53 54
+multiple_term (37)
+    on left: 10 11, on right: 23
+string (38)
+    on left: 12 13, on right: 13 14
+print_func (39)
+    on left: 14 15 16 17 18 19 20, on right: 59
+declaration (40)
+    on left: 21, on right: 61
+assignment (41)
+    on left: 22 23 24, on right: 50 66
+multiple_expressions (42)
+    on left: 25 26, on right: 26 48 49 50
+multiple_expressions_no_semi (43)
+    on left: 27 28, on right: 16 28
+variable_list (44)
+    on left: 29 30, on right: 15 22 23 24 30
+scan_func (45)
+    on left: 31, on right: 57
+len_func (46)
+    on left: 32 33 34, on right: 58
+cmp_func (47)
+    on left: 35 36 37 38 39, on right: 60
+func_def (48)
+    on left: 40, on right: 67
+func_call (49)
+    on left: 41, on right: 68
+cmp_operator (50)
+    on left: 42, on right: 43 44 45
+cmp_operator_multiple (51)
+    on left: 43 44 45, on right: 45 47 48 49 50 62
+arith_operation (52)
+    on left: 46, on right: 69
+if_func (53)
+    on left: 47 48, on right: 63
+while_func (54)
+    on left: 49, on right: 71
+for_func (55)
+    on left: 50, on right: 72
+plus_minus (56)
+    on left: 51 52 53 54, on right: 50
+array (57)
+    on left: 55 56, on right: 70
+expr_no_semi (58)
+    on left: 57 58 59 60 61 62 63 64, on right: 18 22 27 28 47 65
+expr (59)
+    on left: 65 66 67 68 69 70 71 72, on right: 3 25 26
+
+
+state 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 1 (program)
+
+    program  go to state 1
+
+
+state 1
+
+    0 $accept: program . $end
+    2 program: program . NEWLINE
+    3        | program . expr
+
+    $end            shift, and go to state 2
+    IDENTIFIER      shift, and go to state 3
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+    NEWLINE         shift, and go to state 7
+    ARRAY           shift, and go to state 8
+    PRINT           shift, and go to state 9
+    TYPE            shift, and go to state 10
+    SCAN            shift, and go to state 11
+    LEN             shift, and go to state 12
+    CMP             shift, and go to state 13
+    FUNC            shift, and go to state 14
+    IF              shift, and go to state 15
+    WHILE           shift, and go to state 16
+    FOR             shift, and go to state 17
+
+    number                 go to state 18
+    term                   go to state 19
+    print_func             go to state 20
+    declaration            go to state 21
+    assignment             go to state 22
+    variable_list          go to state 23
+    scan_func              go to state 24
+    len_func               go to state 25
+    cmp_func               go to state 26
+    func_def               go to state 27
+    func_call              go to state 28
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 30
+    arith_operation        go to state 31
+    if_func                go to state 32
+    while_func             go to state 33
+    for_func               go to state 34
+    array                  go to state 35
+    expr_no_semi           go to state 36
+    expr                   go to state 37
+
+
+state 2
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 3
+
+    7 term: IDENTIFIER .
+    9     | IDENTIFIER . ARRAY
+   29 variable_list: IDENTIFIER .
+   41 func_call: IDENTIFIER . LEFT_PT term COMMA term RIGHT_PT
+
+    ARRAY    shift, and go to state 38
+    LEFT_PT  shift, and go to state 39
+
+    ASSIGNOP  reduce using rule 29 (variable_list)
+    COMMA     reduce using rule 29 (variable_list)
+    $default  reduce using rule 7 (term)
+
+
+state 4
+
+    4 number: INTEGER .
+
+    $default  reduce using rule 4 (number)
+
+
+state 5
+
+    5 number: FLOAT .
+
+    $default  reduce using rule 5 (number)
+
+
+state 6
+
+    6 number: ARITH_OPERATOR . number
+
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number  go to state 40
+
+
+state 7
+
+    2 program: program NEWLINE .
+   64 expr_no_semi: NEWLINE .
+
+    SEMICOLON  reduce using rule 64 (expr_no_semi)
+    $default   reduce using rule 2 (program)
+
+
+state 8
+
+   55 array: ARRAY .
+   56      | ARRAY . ARITH_OPERATOR ARRAY
+
+    ARITH_OPERATOR  shift, and go to state 41
+
+    $default  reduce using rule 55 (array)
+
+
+state 9
+
+   14 print_func: PRINT . LEFT_PT string RIGHT_PT
+   15           | PRINT . LEFT_PT variable_list RIGHT_PT
+   16           | PRINT . LEFT_PT multiple_expressions_no_semi RIGHT_PT
+   17           | PRINT . LEFT_PT STRING COMMA IDENTIFIER RIGHT_PT
+   18           | PRINT . LEFT_PT STRING COMMA expr_no_semi RIGHT_PT
+   19           | PRINT . LEFT_PT IDENTIFIER RIGHT_PT
+   20           | PRINT . LEFT_PT IDENTIFIER ARRAY RIGHT_PT
+
+    LEFT_PT  shift, and go to state 42
+
+
+state 10
+
+   21 declaration: TYPE . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 43
+
+
+state 11
+
+   31 scan_func: SCAN . LEFT_PT IDENTIFIER RIGHT_PT
+
+    LEFT_PT  shift, and go to state 44
+
+
+state 12
+
+   32 len_func: LEN . LEFT_PT STRING RIGHT_PT
+   33         | LEN . LEFT_PT ARRAY RIGHT_PT
+   34         | LEN . LEFT_PT IDENTIFIER RIGHT_PT
+
+    LEFT_PT  shift, and go to state 45
+
+
+state 13
+
+   35 cmp_func: CMP . LEFT_PT STRING COMMA STRING RIGHT_PT
+   36         | CMP . LEFT_PT IDENTIFIER COMMA IDENTIFIER RIGHT_PT
+   37         | CMP . LEFT_PT STRING COMMA IDENTIFIER RIGHT_PT
+   38         | CMP . LEFT_PT IDENTIFIER COMMA STRING RIGHT_PT
+   39         | CMP . LEFT_PT number COMMA number RIGHT_PT
+
+    LEFT_PT  shift, and go to state 46
+
+
+state 14
+
+   40 func_def: FUNC . IDENTIFIER LEFT_PT TYPE IDENTIFIER COMMA TYPE IDENTIFIER RIGHT_PT LEFT_BR RIGHT_BR
+
+    IDENTIFIER  shift, and go to state 47
+
+
+state 15
+
+   47 if_func: IF . LEFT_PT cmp_operator_multiple RIGHT_PT expr_no_semi
+   48        | IF . LEFT_PT cmp_operator_multiple RIGHT_PT LEFT_BR multiple_expressions RIGHT_BR
+
+    LEFT_PT  shift, and go to state 48
+
+
+state 16
+
+   49 while_func: WHILE . LEFT_PT cmp_operator_multiple RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    LEFT_PT  shift, and go to state 49
+
+
+state 17
+
+   50 for_func: FOR . LEFT_PT assignment SEMICOLON cmp_operator_multiple SEMICOLON plus_minus RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    LEFT_PT  shift, and go to state 50
+
+
+state 18
+
+    8 term: number .
+
+    $default  reduce using rule 8 (term)
+
+
+state 19
+
+   42 cmp_operator: term . CMP_OPERATOR term
+   46 arith_operation: term . ARITH_OPERATOR term
+
+    ARITH_OPERATOR  shift, and go to state 51
+    CMP_OPERATOR    shift, and go to state 52
+
+
+state 20
+
+   59 expr_no_semi: print_func .
+
+    $default  reduce using rule 59 (expr_no_semi)
+
+
+state 21
+
+   61 expr_no_semi: declaration .
+
+    $default  reduce using rule 61 (expr_no_semi)
+
+
+state 22
+
+   66 expr: assignment . SEMICOLON
+
+    SEMICOLON  shift, and go to state 53
+
+
+state 23
+
+   22 assignment: variable_list . ASSIGNOP expr_no_semi
+   23           | variable_list . ASSIGNOP multiple_term
+   24           | variable_list . ASSIGNOP variable_list
+   30 variable_list: variable_list . COMMA IDENTIFIER
+
+    ASSIGNOP  shift, and go to state 54
+    COMMA     shift, and go to state 55
+
+
+state 24
+
+   57 expr_no_semi: scan_func .
+
+    $default  reduce using rule 57 (expr_no_semi)
+
+
+state 25
+
+   58 expr_no_semi: len_func .
+
+    $default  reduce using rule 58 (expr_no_semi)
+
+
+state 26
+
+   60 expr_no_semi: cmp_func .
+
+    $default  reduce using rule 60 (expr_no_semi)
+
+
+state 27
+
+   67 expr: func_def . SEMICOLON
+
+    SEMICOLON  shift, and go to state 56
+
+
+state 28
+
+   68 expr: func_call . SEMICOLON
+
+    SEMICOLON  shift, and go to state 57
+
+
+state 29
+
+   43 cmp_operator_multiple: cmp_operator .
+   44                      | cmp_operator . CMP_OPERATOR term
+   45                      | cmp_operator . CMP_OPERATOR cmp_operator_multiple
+
+    CMP_OPERATOR  shift, and go to state 58
+
+    $default  reduce using rule 43 (cmp_operator_multiple)
+
+
+state 30
+
+   62 expr_no_semi: cmp_operator_multiple .
+
+    $default  reduce using rule 62 (expr_no_semi)
+
+
+state 31
+
+   69 expr: arith_operation . SEMICOLON
+
+    SEMICOLON  shift, and go to state 59
+
+
+state 32
+
+   63 expr_no_semi: if_func .
+
+    $default  reduce using rule 63 (expr_no_semi)
+
+
+state 33
+
+   71 expr: while_func .
+
+    $default  reduce using rule 71 (expr)
+
+
+state 34
+
+   72 expr: for_func .
+
+    $default  reduce using rule 72 (expr)
+
+
+state 35
+
+   70 expr: array . SEMICOLON
+
+    SEMICOLON  shift, and go to state 60
+
+
+state 36
+
+   65 expr: expr_no_semi . SEMICOLON
+
+    SEMICOLON  shift, and go to state 61
+
+
+state 37
+
+    3 program: program expr .
+
+    $default  reduce using rule 3 (program)
+
+
+state 38
+
+    9 term: IDENTIFIER ARRAY .
+
+    $default  reduce using rule 9 (term)
+
+
+state 39
+
+   41 func_call: IDENTIFIER LEFT_PT . term COMMA term RIGHT_PT
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number  go to state 18
+    term    go to state 63
+
+
+state 40
+
+    6 number: ARITH_OPERATOR number .
+
+    $default  reduce using rule 6 (number)
+
+
+state 41
+
+   56 array: ARRAY ARITH_OPERATOR . ARRAY
+
+    ARRAY  shift, and go to state 64
+
+
+state 42
+
+   14 print_func: PRINT LEFT_PT . string RIGHT_PT
+   15           | PRINT LEFT_PT . variable_list RIGHT_PT
+   16           | PRINT LEFT_PT . multiple_expressions_no_semi RIGHT_PT
+   17           | PRINT LEFT_PT . STRING COMMA IDENTIFIER RIGHT_PT
+   18           | PRINT LEFT_PT . STRING COMMA expr_no_semi RIGHT_PT
+   19           | PRINT LEFT_PT . IDENTIFIER RIGHT_PT
+   20           | PRINT LEFT_PT . IDENTIFIER ARRAY RIGHT_PT
+
+    IDENTIFIER      shift, and go to state 65
+    STRING          shift, and go to state 66
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+    NEWLINE         shift, and go to state 67
+    PRINT           shift, and go to state 9
+    TYPE            shift, and go to state 10
+    SCAN            shift, and go to state 11
+    LEN             shift, and go to state 12
+    CMP             shift, and go to state 13
+    IF              shift, and go to state 15
+
+    number                        go to state 18
+    term                          go to state 68
+    string                        go to state 69
+    print_func                    go to state 20
+    declaration                   go to state 21
+    multiple_expressions_no_semi  go to state 70
+    variable_list                 go to state 71
+    scan_func                     go to state 24
+    len_func                      go to state 25
+    cmp_func                      go to state 26
+    cmp_operator                  go to state 29
+    cmp_operator_multiple         go to state 30
+    if_func                       go to state 32
+    expr_no_semi                  go to state 72
+
+
+state 43
+
+   21 declaration: TYPE IDENTIFIER .
+
+    $default  reduce using rule 21 (declaration)
+
+
+state 44
+
+   31 scan_func: SCAN LEFT_PT . IDENTIFIER RIGHT_PT
+
+    IDENTIFIER  shift, and go to state 73
+
+
+state 45
+
+   32 len_func: LEN LEFT_PT . STRING RIGHT_PT
+   33         | LEN LEFT_PT . ARRAY RIGHT_PT
+   34         | LEN LEFT_PT . IDENTIFIER RIGHT_PT
+
+    IDENTIFIER  shift, and go to state 74
+    STRING      shift, and go to state 75
+    ARRAY       shift, and go to state 76
+
+
+state 46
+
+   35 cmp_func: CMP LEFT_PT . STRING COMMA STRING RIGHT_PT
+   36         | CMP LEFT_PT . IDENTIFIER COMMA IDENTIFIER RIGHT_PT
+   37         | CMP LEFT_PT . STRING COMMA IDENTIFIER RIGHT_PT
+   38         | CMP LEFT_PT . IDENTIFIER COMMA STRING RIGHT_PT
+   39         | CMP LEFT_PT . number COMMA number RIGHT_PT
+
+    IDENTIFIER      shift, and go to state 77
+    STRING          shift, and go to state 78
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number  go to state 79
+
+
+state 47
+
+   40 func_def: FUNC IDENTIFIER . LEFT_PT TYPE IDENTIFIER COMMA TYPE IDENTIFIER RIGHT_PT LEFT_BR RIGHT_BR
+
+    LEFT_PT  shift, and go to state 80
+
+
+state 48
+
+   47 if_func: IF LEFT_PT . cmp_operator_multiple RIGHT_PT expr_no_semi
+   48        | IF LEFT_PT . cmp_operator_multiple RIGHT_PT LEFT_BR multiple_expressions RIGHT_BR
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number                 go to state 18
+    term                   go to state 68
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 81
+
+
+state 49
+
+   49 while_func: WHILE LEFT_PT . cmp_operator_multiple RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number                 go to state 18
+    term                   go to state 68
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 82
+
+
+state 50
+
+   50 for_func: FOR LEFT_PT . assignment SEMICOLON cmp_operator_multiple SEMICOLON plus_minus RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    IDENTIFIER  shift, and go to state 83
+
+    assignment     go to state 84
+    variable_list  go to state 23
+
+
+state 51
+
+   46 arith_operation: term ARITH_OPERATOR . term
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number  go to state 18
+    term    go to state 85
+
+
+state 52
+
+   42 cmp_operator: term CMP_OPERATOR . term
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number  go to state 18
+    term    go to state 86
+
+
+state 53
+
+   66 expr: assignment SEMICOLON .
+
+    $default  reduce using rule 66 (expr)
+
+
+state 54
+
+   22 assignment: variable_list ASSIGNOP . expr_no_semi
+   23           | variable_list ASSIGNOP . multiple_term
+   24           | variable_list ASSIGNOP . variable_list
+
+    IDENTIFIER      shift, and go to state 87
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+    NEWLINE         shift, and go to state 67
+    PRINT           shift, and go to state 9
+    TYPE            shift, and go to state 10
+    SCAN            shift, and go to state 11
+    LEN             shift, and go to state 12
+    CMP             shift, and go to state 13
+    IF              shift, and go to state 15
+
+    number                 go to state 18
+    term                   go to state 88
+    multiple_term          go to state 89
+    print_func             go to state 20
+    declaration            go to state 21
+    variable_list          go to state 90
+    scan_func              go to state 24
+    len_func               go to state 25
+    cmp_func               go to state 26
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 30
+    if_func                go to state 32
+    expr_no_semi           go to state 91
+
+
+state 55
+
+   30 variable_list: variable_list COMMA . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 92
+
+
+state 56
+
+   67 expr: func_def SEMICOLON .
+
+    $default  reduce using rule 67 (expr)
+
+
+state 57
+
+   68 expr: func_call SEMICOLON .
+
+    $default  reduce using rule 68 (expr)
+
+
+state 58
+
+   44 cmp_operator_multiple: cmp_operator CMP_OPERATOR . term
+   45                      | cmp_operator CMP_OPERATOR . cmp_operator_multiple
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number                 go to state 18
+    term                   go to state 93
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 94
+
+
+state 59
+
+   69 expr: arith_operation SEMICOLON .
+
+    $default  reduce using rule 69 (expr)
+
+
+state 60
+
+   70 expr: array SEMICOLON .
+
+    $default  reduce using rule 70 (expr)
+
+
+state 61
+
+   65 expr: expr_no_semi SEMICOLON .
+
+    $default  reduce using rule 65 (expr)
+
+
+state 62
+
+    7 term: IDENTIFIER .
+    9     | IDENTIFIER . ARRAY
+
+    ARRAY  shift, and go to state 38
+
+    $default  reduce using rule 7 (term)
+
+
+state 63
+
+   41 func_call: IDENTIFIER LEFT_PT term . COMMA term RIGHT_PT
+
+    COMMA  shift, and go to state 95
+
+
+state 64
+
+   56 array: ARRAY ARITH_OPERATOR ARRAY .
+
+    $default  reduce using rule 56 (array)
+
+
+state 65
+
+    7 term: IDENTIFIER .
+    9     | IDENTIFIER . ARRAY
+   19 print_func: PRINT LEFT_PT IDENTIFIER . RIGHT_PT
+   20           | PRINT LEFT_PT IDENTIFIER . ARRAY RIGHT_PT
+   29 variable_list: IDENTIFIER .
+
+    ARRAY     shift, and go to state 96
+    RIGHT_PT  shift, and go to state 97
+
+    RIGHT_PT  [reduce using rule 29 (variable_list)]
+    COMMA     reduce using rule 29 (variable_list)
+    $default  reduce using rule 7 (term)
+
+
+state 66
+
+   12 string: STRING .
+   17 print_func: PRINT LEFT_PT STRING . COMMA IDENTIFIER RIGHT_PT
+   18           | PRINT LEFT_PT STRING . COMMA expr_no_semi RIGHT_PT
+
+    COMMA  shift, and go to state 98
+
+    COMMA     [reduce using rule 12 (string)]
+    $default  reduce using rule 12 (string)
+
+
+state 67
+
+   64 expr_no_semi: NEWLINE .
+
+    $default  reduce using rule 64 (expr_no_semi)
+
+
+state 68
+
+   42 cmp_operator: term . CMP_OPERATOR term
+
+    CMP_OPERATOR  shift, and go to state 52
+
+
+state 69
+
+   13 string: string . COMMA STRING
+   14 print_func: PRINT LEFT_PT string . RIGHT_PT
+
+    RIGHT_PT  shift, and go to state 99
+    COMMA     shift, and go to state 100
+
+
+state 70
+
+   16 print_func: PRINT LEFT_PT multiple_expressions_no_semi . RIGHT_PT
+   28 multiple_expressions_no_semi: multiple_expressions_no_semi . COMMA expr_no_semi
+
+    RIGHT_PT  shift, and go to state 101
+    COMMA     shift, and go to state 102
+
+
+state 71
+
+   15 print_func: PRINT LEFT_PT variable_list . RIGHT_PT
+   30 variable_list: variable_list . COMMA IDENTIFIER
+
+    RIGHT_PT  shift, and go to state 103
+    COMMA     shift, and go to state 55
+
+
+state 72
+
+   27 multiple_expressions_no_semi: expr_no_semi .
+
+    $default  reduce using rule 27 (multiple_expressions_no_semi)
+
+
+state 73
+
+   31 scan_func: SCAN LEFT_PT IDENTIFIER . RIGHT_PT
+
+    RIGHT_PT  shift, and go to state 104
+
+
+state 74
+
+   34 len_func: LEN LEFT_PT IDENTIFIER . RIGHT_PT
+
+    RIGHT_PT  shift, and go to state 105
+
+
+state 75
+
+   32 len_func: LEN LEFT_PT STRING . RIGHT_PT
+
+    RIGHT_PT  shift, and go to state 106
+
+
+state 76
+
+   33 len_func: LEN LEFT_PT ARRAY . RIGHT_PT
+
+    RIGHT_PT  shift, and go to state 107
+
+
+state 77
+
+   36 cmp_func: CMP LEFT_PT IDENTIFIER . COMMA IDENTIFIER RIGHT_PT
+   38         | CMP LEFT_PT IDENTIFIER . COMMA STRING RIGHT_PT
+
+    COMMA  shift, and go to state 108
+
+
+state 78
+
+   35 cmp_func: CMP LEFT_PT STRING . COMMA STRING RIGHT_PT
+   37         | CMP LEFT_PT STRING . COMMA IDENTIFIER RIGHT_PT
+
+    COMMA  shift, and go to state 109
+
+
+state 79
+
+   39 cmp_func: CMP LEFT_PT number . COMMA number RIGHT_PT
+
+    COMMA  shift, and go to state 110
+
+
+state 80
+
+   40 func_def: FUNC IDENTIFIER LEFT_PT . TYPE IDENTIFIER COMMA TYPE IDENTIFIER RIGHT_PT LEFT_BR RIGHT_BR
+
+    TYPE  shift, and go to state 111
+
+
+state 81
+
+   47 if_func: IF LEFT_PT cmp_operator_multiple . RIGHT_PT expr_no_semi
+   48        | IF LEFT_PT cmp_operator_multiple . RIGHT_PT LEFT_BR multiple_expressions RIGHT_BR
+
+    RIGHT_PT  shift, and go to state 112
+
+
+state 82
+
+   49 while_func: WHILE LEFT_PT cmp_operator_multiple . RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    RIGHT_PT  shift, and go to state 113
+
+
+state 83
+
+   29 variable_list: IDENTIFIER .
+
+    $default  reduce using rule 29 (variable_list)
+
+
+state 84
+
+   50 for_func: FOR LEFT_PT assignment . SEMICOLON cmp_operator_multiple SEMICOLON plus_minus RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    SEMICOLON  shift, and go to state 114
+
+
+state 85
+
+   46 arith_operation: term ARITH_OPERATOR term .
+
+    $default  reduce using rule 46 (arith_operation)
+
+
+state 86
+
+   42 cmp_operator: term CMP_OPERATOR term .
+
+    $default  reduce using rule 42 (cmp_operator)
+
+
+state 87
+
+    7 term: IDENTIFIER .
+    9     | IDENTIFIER . ARRAY
+   29 variable_list: IDENTIFIER .
+
+    ARRAY  shift, and go to state 38
+
+    SEMICOLON  reduce using rule 7 (term)
+    SEMICOLON  [reduce using rule 29 (variable_list)]
+    COMMA      reduce using rule 7 (term)
+    COMMA      [reduce using rule 29 (variable_list)]
+    $default   reduce using rule 7 (term)
+
+
+state 88
+
+   10 multiple_term: term .
+   11              | term . COMMA term
+   42 cmp_operator: term . CMP_OPERATOR term
+
+    CMP_OPERATOR  shift, and go to state 52
+    COMMA         shift, and go to state 115
+
+    $default  reduce using rule 10 (multiple_term)
+
+
+state 89
+
+   23 assignment: variable_list ASSIGNOP multiple_term .
+
+    $default  reduce using rule 23 (assignment)
+
+
+state 90
+
+   24 assignment: variable_list ASSIGNOP variable_list .
+   30 variable_list: variable_list . COMMA IDENTIFIER
+
+    COMMA  shift, and go to state 55
+
+    $default  reduce using rule 24 (assignment)
+
+
+state 91
+
+   22 assignment: variable_list ASSIGNOP expr_no_semi .
+
+    $default  reduce using rule 22 (assignment)
+
+
+state 92
+
+   30 variable_list: variable_list COMMA IDENTIFIER .
+
+    $default  reduce using rule 30 (variable_list)
+
+
+state 93
+
+   42 cmp_operator: term . CMP_OPERATOR term
+   44 cmp_operator_multiple: cmp_operator CMP_OPERATOR term .
+
+    CMP_OPERATOR  shift, and go to state 52
+
+    $default  reduce using rule 44 (cmp_operator_multiple)
+
+
+state 94
+
+   45 cmp_operator_multiple: cmp_operator CMP_OPERATOR cmp_operator_multiple .
+
+    $default  reduce using rule 45 (cmp_operator_multiple)
+
+
+state 95
+
+   41 func_call: IDENTIFIER LEFT_PT term COMMA . term RIGHT_PT
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number  go to state 18
+    term    go to state 116
+
+
+state 96
+
+    9 term: IDENTIFIER ARRAY .
+   20 print_func: PRINT LEFT_PT IDENTIFIER ARRAY . RIGHT_PT
+
+    RIGHT_PT  shift, and go to state 117
+
+    $default  reduce using rule 9 (term)
+
+
+state 97
+
+   19 print_func: PRINT LEFT_PT IDENTIFIER RIGHT_PT .
+
+    $default  reduce using rule 19 (print_func)
+
+
+state 98
+
+   17 print_func: PRINT LEFT_PT STRING COMMA . IDENTIFIER RIGHT_PT
+   18           | PRINT LEFT_PT STRING COMMA . expr_no_semi RIGHT_PT
+
+    IDENTIFIER      shift, and go to state 118
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+    NEWLINE         shift, and go to state 67
+    PRINT           shift, and go to state 9
+    TYPE            shift, and go to state 10
+    SCAN            shift, and go to state 11
+    LEN             shift, and go to state 12
+    CMP             shift, and go to state 13
+    IF              shift, and go to state 15
+
+    number                 go to state 18
+    term                   go to state 68
+    print_func             go to state 20
+    declaration            go to state 21
+    scan_func              go to state 24
+    len_func               go to state 25
+    cmp_func               go to state 26
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 30
+    if_func                go to state 32
+    expr_no_semi           go to state 119
+
+
+state 99
+
+   14 print_func: PRINT LEFT_PT string RIGHT_PT .
+
+    $default  reduce using rule 14 (print_func)
+
+
+state 100
+
+   13 string: string COMMA . STRING
+
+    STRING  shift, and go to state 120
+
+
+state 101
+
+   16 print_func: PRINT LEFT_PT multiple_expressions_no_semi RIGHT_PT .
+
+    $default  reduce using rule 16 (print_func)
+
+
+state 102
+
+   28 multiple_expressions_no_semi: multiple_expressions_no_semi COMMA . expr_no_semi
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+    NEWLINE         shift, and go to state 67
+    PRINT           shift, and go to state 9
+    TYPE            shift, and go to state 10
+    SCAN            shift, and go to state 11
+    LEN             shift, and go to state 12
+    CMP             shift, and go to state 13
+    IF              shift, and go to state 15
+
+    number                 go to state 18
+    term                   go to state 68
+    print_func             go to state 20
+    declaration            go to state 21
+    scan_func              go to state 24
+    len_func               go to state 25
+    cmp_func               go to state 26
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 30
+    if_func                go to state 32
+    expr_no_semi           go to state 121
+
+
+state 103
+
+   15 print_func: PRINT LEFT_PT variable_list RIGHT_PT .
+
+    $default  reduce using rule 15 (print_func)
+
+
+state 104
+
+   31 scan_func: SCAN LEFT_PT IDENTIFIER RIGHT_PT .
+
+    $default  reduce using rule 31 (scan_func)
+
+
+state 105
+
+   34 len_func: LEN LEFT_PT IDENTIFIER RIGHT_PT .
+
+    $default  reduce using rule 34 (len_func)
+
+
+state 106
+
+   32 len_func: LEN LEFT_PT STRING RIGHT_PT .
+
+    $default  reduce using rule 32 (len_func)
+
+
+state 107
+
+   33 len_func: LEN LEFT_PT ARRAY RIGHT_PT .
+
+    $default  reduce using rule 33 (len_func)
+
+
+state 108
+
+   36 cmp_func: CMP LEFT_PT IDENTIFIER COMMA . IDENTIFIER RIGHT_PT
+   38         | CMP LEFT_PT IDENTIFIER COMMA . STRING RIGHT_PT
+
+    IDENTIFIER  shift, and go to state 122
+    STRING      shift, and go to state 123
+
+
+state 109
+
+   35 cmp_func: CMP LEFT_PT STRING COMMA . STRING RIGHT_PT
+   37         | CMP LEFT_PT STRING COMMA . IDENTIFIER RIGHT_PT
+
+    IDENTIFIER  shift, and go to state 124
+    STRING      shift, and go to state 125
+
+
+state 110
+
+   39 cmp_func: CMP LEFT_PT number COMMA . number RIGHT_PT
+
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number  go to state 126
+
+
+state 111
+
+   40 func_def: FUNC IDENTIFIER LEFT_PT TYPE . IDENTIFIER COMMA TYPE IDENTIFIER RIGHT_PT LEFT_BR RIGHT_BR
+
+    IDENTIFIER  shift, and go to state 127
+
+
+state 112
+
+   47 if_func: IF LEFT_PT cmp_operator_multiple RIGHT_PT . expr_no_semi
+   48        | IF LEFT_PT cmp_operator_multiple RIGHT_PT . LEFT_BR multiple_expressions RIGHT_BR
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+    NEWLINE         shift, and go to state 67
+    PRINT           shift, and go to state 9
+    TYPE            shift, and go to state 10
+    SCAN            shift, and go to state 11
+    LEN             shift, and go to state 12
+    CMP             shift, and go to state 13
+    LEFT_BR         shift, and go to state 128
+    IF              shift, and go to state 15
+
+    number                 go to state 18
+    term                   go to state 68
+    print_func             go to state 20
+    declaration            go to state 21
+    scan_func              go to state 24
+    len_func               go to state 25
+    cmp_func               go to state 26
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 30
+    if_func                go to state 32
+    expr_no_semi           go to state 129
+
+
+state 113
+
+   49 while_func: WHILE LEFT_PT cmp_operator_multiple RIGHT_PT . NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    NEWLINE  shift, and go to state 130
+
+
+state 114
+
+   50 for_func: FOR LEFT_PT assignment SEMICOLON . cmp_operator_multiple SEMICOLON plus_minus RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number                 go to state 18
+    term                   go to state 68
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 131
+
+
+state 115
+
+   11 multiple_term: term COMMA . term
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number  go to state 18
+    term    go to state 132
+
+
+state 116
+
+   41 func_call: IDENTIFIER LEFT_PT term COMMA term . RIGHT_PT
+
+    RIGHT_PT  shift, and go to state 133
+
+
+state 117
+
+   20 print_func: PRINT LEFT_PT IDENTIFIER ARRAY RIGHT_PT .
+
+    $default  reduce using rule 20 (print_func)
+
+
+state 118
+
+    7 term: IDENTIFIER .
+    9     | IDENTIFIER . ARRAY
+   17 print_func: PRINT LEFT_PT STRING COMMA IDENTIFIER . RIGHT_PT
+
+    ARRAY     shift, and go to state 38
+    RIGHT_PT  shift, and go to state 134
+
+    $default  reduce using rule 7 (term)
+
+
+state 119
+
+   18 print_func: PRINT LEFT_PT STRING COMMA expr_no_semi . RIGHT_PT
+
+    RIGHT_PT  shift, and go to state 135
+
+
+state 120
+
+   13 string: string COMMA STRING .
+
+    $default  reduce using rule 13 (string)
+
+
+state 121
+
+   28 multiple_expressions_no_semi: multiple_expressions_no_semi COMMA expr_no_semi .
+
+    $default  reduce using rule 28 (multiple_expressions_no_semi)
+
+
+state 122
+
+   36 cmp_func: CMP LEFT_PT IDENTIFIER COMMA IDENTIFIER . RIGHT_PT
+
+    RIGHT_PT  shift, and go to state 136
+
+
+state 123
+
+   38 cmp_func: CMP LEFT_PT IDENTIFIER COMMA STRING . RIGHT_PT
+
+    RIGHT_PT  shift, and go to state 137
+
+
+state 124
+
+   37 cmp_func: CMP LEFT_PT STRING COMMA IDENTIFIER . RIGHT_PT
+
+    RIGHT_PT  shift, and go to state 138
+
+
+state 125
+
+   35 cmp_func: CMP LEFT_PT STRING COMMA STRING . RIGHT_PT
+
+    RIGHT_PT  shift, and go to state 139
+
+
+state 126
+
+   39 cmp_func: CMP LEFT_PT number COMMA number . RIGHT_PT
+
+    RIGHT_PT  shift, and go to state 140
+
+
+state 127
+
+   40 func_def: FUNC IDENTIFIER LEFT_PT TYPE IDENTIFIER . COMMA TYPE IDENTIFIER RIGHT_PT LEFT_BR RIGHT_BR
+
+    COMMA  shift, and go to state 141
+
+
+state 128
+
+   48 if_func: IF LEFT_PT cmp_operator_multiple RIGHT_PT LEFT_BR . multiple_expressions RIGHT_BR
+
+    IDENTIFIER      shift, and go to state 3
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+    NEWLINE         shift, and go to state 67
+    ARRAY           shift, and go to state 8
+    PRINT           shift, and go to state 9
+    TYPE            shift, and go to state 10
+    SCAN            shift, and go to state 11
+    LEN             shift, and go to state 12
+    CMP             shift, and go to state 13
+    FUNC            shift, and go to state 14
+    IF              shift, and go to state 15
+    WHILE           shift, and go to state 16
+    FOR             shift, and go to state 17
+
+    number                 go to state 18
+    term                   go to state 19
+    print_func             go to state 20
+    declaration            go to state 21
+    assignment             go to state 22
+    multiple_expressions   go to state 142
+    variable_list          go to state 23
+    scan_func              go to state 24
+    len_func               go to state 25
+    cmp_func               go to state 26
+    func_def               go to state 27
+    func_call              go to state 28
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 30
+    arith_operation        go to state 31
+    if_func                go to state 32
+    while_func             go to state 33
+    for_func               go to state 34
+    array                  go to state 35
+    expr_no_semi           go to state 36
+    expr                   go to state 143
+
+
+state 129
+
+   47 if_func: IF LEFT_PT cmp_operator_multiple RIGHT_PT expr_no_semi .
+
+    $default  reduce using rule 47 (if_func)
+
+
+state 130
+
+   49 while_func: WHILE LEFT_PT cmp_operator_multiple RIGHT_PT NEWLINE . LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    LEFT_BR  shift, and go to state 144
+
+
+state 131
+
+   50 for_func: FOR LEFT_PT assignment SEMICOLON cmp_operator_multiple . SEMICOLON plus_minus RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    SEMICOLON  shift, and go to state 145
+
+
+state 132
+
+   11 multiple_term: term COMMA term .
+
+    $default  reduce using rule 11 (multiple_term)
+
+
+state 133
+
+   41 func_call: IDENTIFIER LEFT_PT term COMMA term RIGHT_PT .
+
+    $default  reduce using rule 41 (func_call)
+
+
+state 134
+
+   17 print_func: PRINT LEFT_PT STRING COMMA IDENTIFIER RIGHT_PT .
+
+    $default  reduce using rule 17 (print_func)
+
+
+state 135
+
+   18 print_func: PRINT LEFT_PT STRING COMMA expr_no_semi RIGHT_PT .
+
+    $default  reduce using rule 18 (print_func)
+
+
+state 136
+
+   36 cmp_func: CMP LEFT_PT IDENTIFIER COMMA IDENTIFIER RIGHT_PT .
+
+    $default  reduce using rule 36 (cmp_func)
+
+
+state 137
+
+   38 cmp_func: CMP LEFT_PT IDENTIFIER COMMA STRING RIGHT_PT .
+
+    $default  reduce using rule 38 (cmp_func)
+
+
+state 138
+
+   37 cmp_func: CMP LEFT_PT STRING COMMA IDENTIFIER RIGHT_PT .
+
+    $default  reduce using rule 37 (cmp_func)
+
+
+state 139
+
+   35 cmp_func: CMP LEFT_PT STRING COMMA STRING RIGHT_PT .
+
+    $default  reduce using rule 35 (cmp_func)
+
+
+state 140
+
+   39 cmp_func: CMP LEFT_PT number COMMA number RIGHT_PT .
+
+    $default  reduce using rule 39 (cmp_func)
+
+
+state 141
+
+   40 func_def: FUNC IDENTIFIER LEFT_PT TYPE IDENTIFIER COMMA . TYPE IDENTIFIER RIGHT_PT LEFT_BR RIGHT_BR
+
+    TYPE  shift, and go to state 146
+
+
+state 142
+
+   26 multiple_expressions: multiple_expressions . expr
+   48 if_func: IF LEFT_PT cmp_operator_multiple RIGHT_PT LEFT_BR multiple_expressions . RIGHT_BR
+
+    IDENTIFIER      shift, and go to state 3
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+    NEWLINE         shift, and go to state 67
+    ARRAY           shift, and go to state 8
+    PRINT           shift, and go to state 9
+    TYPE            shift, and go to state 10
+    SCAN            shift, and go to state 11
+    LEN             shift, and go to state 12
+    CMP             shift, and go to state 13
+    FUNC            shift, and go to state 14
+    RIGHT_BR        shift, and go to state 147
+    IF              shift, and go to state 15
+    WHILE           shift, and go to state 16
+    FOR             shift, and go to state 17
+
+    number                 go to state 18
+    term                   go to state 19
+    print_func             go to state 20
+    declaration            go to state 21
+    assignment             go to state 22
+    variable_list          go to state 23
+    scan_func              go to state 24
+    len_func               go to state 25
+    cmp_func               go to state 26
+    func_def               go to state 27
+    func_call              go to state 28
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 30
+    arith_operation        go to state 31
+    if_func                go to state 32
+    while_func             go to state 33
+    for_func               go to state 34
+    array                  go to state 35
+    expr_no_semi           go to state 36
+    expr                   go to state 148
+
+
+state 143
+
+   25 multiple_expressions: expr .
+
+    $default  reduce using rule 25 (multiple_expressions)
+
+
+state 144
+
+   49 while_func: WHILE LEFT_PT cmp_operator_multiple RIGHT_PT NEWLINE LEFT_BR . NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    NEWLINE  shift, and go to state 149
+
+
+state 145
+
+   50 for_func: FOR LEFT_PT assignment SEMICOLON cmp_operator_multiple SEMICOLON . plus_minus RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+    DOUBLE_PLUS     shift, and go to state 150
+    DOUBLE_MINUS    shift, and go to state 151
+
+    number      go to state 18
+    term        go to state 152
+    plus_minus  go to state 153
+
+
+state 146
+
+   40 func_def: FUNC IDENTIFIER LEFT_PT TYPE IDENTIFIER COMMA TYPE . IDENTIFIER RIGHT_PT LEFT_BR RIGHT_BR
+
+    IDENTIFIER  shift, and go to state 154
+
+
+state 147
+
+   48 if_func: IF LEFT_PT cmp_operator_multiple RIGHT_PT LEFT_BR multiple_expressions RIGHT_BR .
+
+    $default  reduce using rule 48 (if_func)
+
+
+state 148
+
+   26 multiple_expressions: multiple_expressions expr .
+
+    $default  reduce using rule 26 (multiple_expressions)
+
+
+state 149
+
+   49 while_func: WHILE LEFT_PT cmp_operator_multiple RIGHT_PT NEWLINE LEFT_BR NEWLINE . multiple_expressions NEWLINE RIGHT_BR
+
+    IDENTIFIER      shift, and go to state 3
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+    NEWLINE         shift, and go to state 67
+    ARRAY           shift, and go to state 8
+    PRINT           shift, and go to state 9
+    TYPE            shift, and go to state 10
+    SCAN            shift, and go to state 11
+    LEN             shift, and go to state 12
+    CMP             shift, and go to state 13
+    FUNC            shift, and go to state 14
+    IF              shift, and go to state 15
+    WHILE           shift, and go to state 16
+    FOR             shift, and go to state 17
+
+    number                 go to state 18
+    term                   go to state 19
+    print_func             go to state 20
+    declaration            go to state 21
+    assignment             go to state 22
+    multiple_expressions   go to state 155
+    variable_list          go to state 23
+    scan_func              go to state 24
+    len_func               go to state 25
+    cmp_func               go to state 26
+    func_def               go to state 27
+    func_call              go to state 28
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 30
+    arith_operation        go to state 31
+    if_func                go to state 32
+    while_func             go to state 33
+    for_func               go to state 34
+    array                  go to state 35
+    expr_no_semi           go to state 36
+    expr                   go to state 143
+
+
+state 150
+
+   51 plus_minus: DOUBLE_PLUS . term
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number  go to state 18
+    term    go to state 156
+
+
+state 151
+
+   52 plus_minus: DOUBLE_MINUS . term
+
+    IDENTIFIER      shift, and go to state 62
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+
+    number  go to state 18
+    term    go to state 157
+
+
+state 152
+
+   53 plus_minus: term . DOUBLE_PLUS
+   54           | term . DOUBLE_MINUS
+
+    DOUBLE_PLUS   shift, and go to state 158
+    DOUBLE_MINUS  shift, and go to state 159
+
+
+state 153
+
+   50 for_func: FOR LEFT_PT assignment SEMICOLON cmp_operator_multiple SEMICOLON plus_minus . RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    RIGHT_PT  shift, and go to state 160
+
+
+state 154
+
+   40 func_def: FUNC IDENTIFIER LEFT_PT TYPE IDENTIFIER COMMA TYPE IDENTIFIER . RIGHT_PT LEFT_BR RIGHT_BR
+
+    RIGHT_PT  shift, and go to state 161
+
+
+state 155
+
+   26 multiple_expressions: multiple_expressions . expr
+   49 while_func: WHILE LEFT_PT cmp_operator_multiple RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions . NEWLINE RIGHT_BR
+
+    IDENTIFIER      shift, and go to state 3
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+    NEWLINE         shift, and go to state 162
+    ARRAY           shift, and go to state 8
+    PRINT           shift, and go to state 9
+    TYPE            shift, and go to state 10
+    SCAN            shift, and go to state 11
+    LEN             shift, and go to state 12
+    CMP             shift, and go to state 13
+    FUNC            shift, and go to state 14
+    IF              shift, and go to state 15
+    WHILE           shift, and go to state 16
+    FOR             shift, and go to state 17
+
+    number                 go to state 18
+    term                   go to state 19
+    print_func             go to state 20
+    declaration            go to state 21
+    assignment             go to state 22
+    variable_list          go to state 23
+    scan_func              go to state 24
+    len_func               go to state 25
+    cmp_func               go to state 26
+    func_def               go to state 27
+    func_call              go to state 28
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 30
+    arith_operation        go to state 31
+    if_func                go to state 32
+    while_func             go to state 33
+    for_func               go to state 34
+    array                  go to state 35
+    expr_no_semi           go to state 36
+    expr                   go to state 148
+
+
+state 156
+
+   51 plus_minus: DOUBLE_PLUS term .
+
+    $default  reduce using rule 51 (plus_minus)
+
+
+state 157
+
+   52 plus_minus: DOUBLE_MINUS term .
+
+    $default  reduce using rule 52 (plus_minus)
+
+
+state 158
+
+   53 plus_minus: term DOUBLE_PLUS .
+
+    $default  reduce using rule 53 (plus_minus)
+
+
+state 159
+
+   54 plus_minus: term DOUBLE_MINUS .
+
+    $default  reduce using rule 54 (plus_minus)
+
+
+state 160
+
+   50 for_func: FOR LEFT_PT assignment SEMICOLON cmp_operator_multiple SEMICOLON plus_minus RIGHT_PT . NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    NEWLINE  shift, and go to state 163
+
+
+state 161
+
+   40 func_def: FUNC IDENTIFIER LEFT_PT TYPE IDENTIFIER COMMA TYPE IDENTIFIER RIGHT_PT . LEFT_BR RIGHT_BR
+
+    LEFT_BR  shift, and go to state 164
+
+
+state 162
+
+   49 while_func: WHILE LEFT_PT cmp_operator_multiple RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE . RIGHT_BR
+   64 expr_no_semi: NEWLINE .
+
+    RIGHT_BR  shift, and go to state 165
+
+    $default  reduce using rule 64 (expr_no_semi)
+
+
+state 163
+
+   50 for_func: FOR LEFT_PT assignment SEMICOLON cmp_operator_multiple SEMICOLON plus_minus RIGHT_PT NEWLINE . LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    LEFT_BR  shift, and go to state 166
+
+
+state 164
+
+   40 func_def: FUNC IDENTIFIER LEFT_PT TYPE IDENTIFIER COMMA TYPE IDENTIFIER RIGHT_PT LEFT_BR . RIGHT_BR
+
+    RIGHT_BR  shift, and go to state 167
+
+
+state 165
+
+   49 while_func: WHILE LEFT_PT cmp_operator_multiple RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR .
+
+    $default  reduce using rule 49 (while_func)
+
+
+state 166
+
+   50 for_func: FOR LEFT_PT assignment SEMICOLON cmp_operator_multiple SEMICOLON plus_minus RIGHT_PT NEWLINE LEFT_BR . NEWLINE multiple_expressions NEWLINE RIGHT_BR
+
+    NEWLINE  shift, and go to state 168
+
+
+state 167
+
+   40 func_def: FUNC IDENTIFIER LEFT_PT TYPE IDENTIFIER COMMA TYPE IDENTIFIER RIGHT_PT LEFT_BR RIGHT_BR .
+
+    $default  reduce using rule 40 (func_def)
+
+
+state 168
+
+   50 for_func: FOR LEFT_PT assignment SEMICOLON cmp_operator_multiple SEMICOLON plus_minus RIGHT_PT NEWLINE LEFT_BR NEWLINE . multiple_expressions NEWLINE RIGHT_BR
+
+    IDENTIFIER      shift, and go to state 3
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+    NEWLINE         shift, and go to state 67
+    ARRAY           shift, and go to state 8
+    PRINT           shift, and go to state 9
+    TYPE            shift, and go to state 10
+    SCAN            shift, and go to state 11
+    LEN             shift, and go to state 12
+    CMP             shift, and go to state 13
+    FUNC            shift, and go to state 14
+    IF              shift, and go to state 15
+    WHILE           shift, and go to state 16
+    FOR             shift, and go to state 17
+
+    number                 go to state 18
+    term                   go to state 19
+    print_func             go to state 20
+    declaration            go to state 21
+    assignment             go to state 22
+    multiple_expressions   go to state 169
+    variable_list          go to state 23
+    scan_func              go to state 24
+    len_func               go to state 25
+    cmp_func               go to state 26
+    func_def               go to state 27
+    func_call              go to state 28
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 30
+    arith_operation        go to state 31
+    if_func                go to state 32
+    while_func             go to state 33
+    for_func               go to state 34
+    array                  go to state 35
+    expr_no_semi           go to state 36
+    expr                   go to state 143
+
+
+state 169
+
+   26 multiple_expressions: multiple_expressions . expr
+   50 for_func: FOR LEFT_PT assignment SEMICOLON cmp_operator_multiple SEMICOLON plus_minus RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions . NEWLINE RIGHT_BR
+
+    IDENTIFIER      shift, and go to state 3
+    INTEGER         shift, and go to state 4
+    FLOAT           shift, and go to state 5
+    ARITH_OPERATOR  shift, and go to state 6
+    NEWLINE         shift, and go to state 170
+    ARRAY           shift, and go to state 8
+    PRINT           shift, and go to state 9
+    TYPE            shift, and go to state 10
+    SCAN            shift, and go to state 11
+    LEN             shift, and go to state 12
+    CMP             shift, and go to state 13
+    FUNC            shift, and go to state 14
+    IF              shift, and go to state 15
+    WHILE           shift, and go to state 16
+    FOR             shift, and go to state 17
+
+    number                 go to state 18
+    term                   go to state 19
+    print_func             go to state 20
+    declaration            go to state 21
+    assignment             go to state 22
+    variable_list          go to state 23
+    scan_func              go to state 24
+    len_func               go to state 25
+    cmp_func               go to state 26
+    func_def               go to state 27
+    func_call              go to state 28
+    cmp_operator           go to state 29
+    cmp_operator_multiple  go to state 30
+    arith_operation        go to state 31
+    if_func                go to state 32
+    while_func             go to state 33
+    for_func               go to state 34
+    array                  go to state 35
+    expr_no_semi           go to state 36
+    expr                   go to state 148
+
+
+state 170
+
+   50 for_func: FOR LEFT_PT assignment SEMICOLON cmp_operator_multiple SEMICOLON plus_minus RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE . RIGHT_BR
+   64 expr_no_semi: NEWLINE .
+
+    RIGHT_BR  shift, and go to state 171
+
+    $default  reduce using rule 64 (expr_no_semi)
+
+
+state 171
+
+   50 for_func: FOR LEFT_PT assignment SEMICOLON cmp_operator_multiple SEMICOLON plus_minus RIGHT_PT NEWLINE LEFT_BR NEWLINE multiple_expressions NEWLINE RIGHT_BR .
+
+    $default  reduce using rule 50 (for_func)

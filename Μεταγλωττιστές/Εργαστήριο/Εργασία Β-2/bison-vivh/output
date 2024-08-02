@@ -1,0 +1,1211 @@
+	Flex -> Matched token: int
+	Flex -> Matched token: summary
+	Flex -> Matched token: (
+	Line 1 at lexeme '(' : syntax error
+	Flex -> Matched token: int
+	Flex -> Matched token: varA
+	Flex -> Matched token: ,
+	Flex -> Matched token: int
+	Flex -> Matched token: varB
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\nSummary = %d"
+	Line 2 at lexeme '"\nSummary = %d"' : syntax error
+	Flex -> Matched token: ,
+	Flex -> Matched token: varA
+	Flex -> Matched token: +
+	Flex -> Matched token: varB
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 3 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: int
+	Flex -> Matched token: substraction
+	Flex -> Matched token: (
+	Line 5 at lexeme '(' : syntax error
+	Flex -> Matched token: int
+	Flex -> Matched token: varA
+	Flex -> Matched token: ,
+	Flex -> Matched token: int
+	Flex -> Matched token: varB
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\nSubstraction = %d"
+	Line 6 at lexeme '"\nSubstraction = %d"' : syntax error
+	Flex -> Matched token: ,
+	Flex -> Matched token: varA
+	Flex -> Matched token: -
+	Flex -> Matched token: varB
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 7 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: int
+	Flex -> Matched token: multiply
+	Flex -> Matched token: (
+	Line 9 at lexeme '(' : syntax error
+	Flex -> Matched token: int
+	Flex -> Matched token: varA
+	Flex -> Matched token: ,
+	Flex -> Matched token: int
+	Flex -> Matched token: varB
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\nMultiply = %d"
+	Line 10 at lexeme '"\nMultiply = %d"' : syntax error
+	Flex -> Matched token: ,
+	Flex -> Matched token: varA
+	Flex -> Matched token: *
+	Flex -> Matched token: varB
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 11 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: int
+	Flex -> Matched token: division
+	Flex -> Matched token: (
+	Line 13 at lexeme '(' : syntax error
+	Flex -> Matched token: int
+	Flex -> Matched token: varA
+	Flex -> Matched token: ,
+	Flex -> Matched token: int
+	Flex -> Matched token: varB
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\nDivision(x/y) = %d"
+	Line 14 at lexeme '"\nDivision(x/y) = %d"' : syntax error
+	Flex -> Matched token: ,
+	Flex -> Matched token: varA
+	Flex -> Matched token: /
+	Flex -> Matched token: varB
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\nDivision(y/x) = %d"
+	Line 15 at lexeme '"\nDivision(y/x) = %d"' : syntax error
+	Flex -> Matched token: ,
+	Flex -> Matched token: varB
+	Flex -> Matched token: /
+	Flex -> Matched token: varA
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 16 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Line 18 at lexeme 'void' : syntax error
+	Flex -> Matched token: concat
+	Flex -> Matched token: (
+	Flex -> Matched token: int
+	Flex -> Matched token: A
+	Flex -> Matched token: [
+	Flex -> Matched token: ]
+	Flex -> Matched token: ,
+	Flex -> Matched token: int
+	Flex -> Matched token: sizeA
+	Flex -> Matched token: ,
+	Flex -> Matched token: int
+	Flex -> Matched token: B
+	Flex -> Matched token: [
+	Flex -> Matched token: ]
+	Flex -> Matched token: ,
+	Flex -> Matched token: int
+	Flex -> Matched token: sizeB
+	Flex -> Matched token: ,
+	Flex -> Matched token: int
+	Flex -> Matched token: C
+	Flex -> Matched token: [
+	Flex -> Matched token: ]
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: for
+	Flex -> Matched token: (
+	Flex -> Matched token: int
+	Line 19 at lexeme 'int' : syntax error
+	Flex -> Matched token: i
+	Flex -> Matched token: =
+	Flex -> Matched token: 0
+	Flex -> Matched token: ;
+	Flex -> Matched token: i
+	Flex -> Matched token: <
+	Flex -> Matched token: sizeA
+	Flex -> Matched token: ;
+	Flex -> Matched token: i
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: C
+	Flex -> Matched token: [
+	Line 20 at lexeme '[' : syntax error
+	Flex -> Matched token: i
+	Flex -> Matched token: ]
+	Flex -> Matched token: =
+	Flex -> Matched token: A
+	Flex -> Matched token: [
+	Flex -> Matched token: i
+	Flex -> Matched token: ]
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 21 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: for
+	Flex -> Matched token: (
+	Flex -> Matched token: int
+	Line 22 at lexeme 'int' : syntax error
+	Flex -> Matched token: i
+	Flex -> Matched token: =
+	Flex -> Matched token: 0
+	Flex -> Matched token: ;
+	Flex -> Matched token: i
+	Flex -> Matched token: <
+	Flex -> Matched token: sizeB
+	Flex -> Matched token: ;
+	Flex -> Matched token: i
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: C
+	Flex -> Matched token: [
+	Line 23 at lexeme '[' : syntax error
+	Flex -> Matched token: sizeA
+	Flex -> Matched token: +
+	Flex -> Matched token: i
+	Flex -> Matched token: ]
+	Flex -> Matched token: =
+	Flex -> Matched token: B
+	Flex -> Matched token: [
+	Flex -> Matched token: i
+	Flex -> Matched token: ]
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 24 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 25 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: int
+	Flex -> Matched token: main
+	Flex -> Matched token: (
+	Line 27 at lexeme '(' : syntax error
+	Flex -> Matched token: int
+	Flex -> Matched token: argc
+	Flex -> Matched token: ,
+	Flex -> Matched token: char
+	Flex -> Matched token: *
+	Flex -> Matched token: argv
+	Flex -> Matched token: [
+	Flex -> Matched token: ]
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: int
+	Flex -> Matched token: x
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	Flex -> Matched token: int
+	Flex -> Matched token: y
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	Flex -> Matched token: int
+	Flex -> Matched token: z
+	Flex -> Matched token: ,
+	Line 30 at lexeme ',' : syntax error
+	Flex -> Matched token: a
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: int
+	Flex -> Matched token: result_cmp
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "type x:"
+	Line 32 at lexeme '"type x:"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: scanf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%d"
+	Line 33 at lexeme '"%d"' : syntax error
+	Flex -> Matched token: ,
+	Line 33 at lexeme '&' : Unrecognized character(s) encountered!
+		4 character(s) ignored so far
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "type y:"
+	Line 34 at lexeme '"type y:"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: scanf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%d"
+	Line 35 at lexeme '"%d"' : syntax error
+	Flex -> Matched token: ,
+	Line 35 at lexeme '&' : Unrecognized character(s) encountered!
+		8 character(s) ignored so far
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: summary
+	Flex -> Matched token: (
+	Flex -> Matched token: x
+	Flex -> Matched token: ,
+	Flex -> Matched token: y
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	Flex -> Matched token: substraction
+	Flex -> Matched token: (
+	Flex -> Matched token: x
+	Flex -> Matched token: ,
+	Flex -> Matched token: y
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	Flex -> Matched token: multiply
+	Flex -> Matched token: (
+	Flex -> Matched token: x
+	Flex -> Matched token: ,
+	Flex -> Matched token: y
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	Flex -> Matched token: division
+	Flex -> Matched token: (
+	Flex -> Matched token: x
+	Flex -> Matched token: ,
+	Flex -> Matched token: y
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\n"
+	Line 40 at lexeme '"\n"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: char
+	Flex -> Matched token: word1
+	Line 42 at lexeme 'word1' : syntax error
+	Flex -> Matched token: [
+	Flex -> Matched token: 50
+	Flex -> Matched token: ]
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "type a word now : "
+	Line 43 at lexeme '"type a word now : "' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: scanf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%s"
+	Line 44 at lexeme '"%s"' : syntax error
+	Flex -> Matched token: ,
+	Line 44 at lexeme '&' : Unrecognized character(s) encountered!
+		16 character(s) ignored so far
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\nThe length of word is : %zu \n"
+	Line 44 at lexeme '"\nThe length of word is : %zu \n"' : syntax error
+	Flex -> Matched token: ,
+	Flex -> Matched token: strlen
+	Flex -> Matched token: (
+	Flex -> Matched token: word1
+	Flex -> Matched token: )
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: char
+	Flex -> Matched token: word2
+	Line 46 at lexeme 'word2' : syntax error
+	Flex -> Matched token: [
+	Flex -> Matched token: 50
+	Flex -> Matched token: ]
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\ntype another word : "
+	Line 47 at lexeme '"\ntype another word : "' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: scanf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%s"
+	Line 48 at lexeme '"%s"' : syntax error
+	Flex -> Matched token: ,
+	Line 48 at lexeme '&' : Unrecognized character(s) encountered!
+		24 character(s) ignored so far
+	ERROR !
+	Flex -> Matched token: result_cmp
+	Flex -> Matched token: =
+	Flex -> Matched token: strcmp
+	Flex -> Matched token: (
+	Line 48 at lexeme '(' : syntax error
+	Flex -> Matched token: word1
+	Flex -> Matched token: ,
+	Flex -> Matched token: word2
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: if
+	Flex -> Matched token: (
+	Flex -> Matched token: result_cmp
+	Flex -> Matched token: ==
+	Flex -> Matched token: 0
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	Line 51 at lexeme '
+' : syntax error
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "The words are equal\n"
+	Line 51 at lexeme '"The words are equal\n"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 52 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Line 53 at lexeme 'else' : syntax error
+	Flex -> Matched token: if
+	Flex -> Matched token: (
+	Flex -> Matched token: result_cmp
+	Flex -> Matched token: >
+	Flex -> Matched token: 0
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%s is greater than %s\n"
+	Line 54 at lexeme '"%s is greater than %s\n"' : syntax error
+	Flex -> Matched token: ,
+	Flex -> Matched token: word1
+	Flex -> Matched token: ,
+	Flex -> Matched token: word2
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 55 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Line 56 at lexeme 'else' : syntax error
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%s is less than %s\n"
+	Line 57 at lexeme '"%s is less than %s\n"' : syntax error
+	Flex -> Matched token: ,
+	Flex -> Matched token: word1
+	Flex -> Matched token: ,
+	Flex -> Matched token: word2
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 58 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: int
+	Flex -> Matched token: i
+	Flex -> Matched token: =
+	Line 60 at lexeme '=' : syntax error
+	Flex -> Matched token: 0
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: z
+	Flex -> Matched token: =
+	Flex -> Matched token: 2
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	Flex -> Matched token: a
+	Flex -> Matched token: =
+	Flex -> Matched token: 1
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	Flex -> Matched token: while
+	Flex -> Matched token: (
+	Flex -> Matched token: i
+	Flex -> Matched token: <
+	Flex -> Matched token: 3
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	Line 64 at lexeme '
+' : syntax error
+	ERROR !
+	Flex -> Matched token: z
+	Flex -> Matched token: =
+	Flex -> Matched token: (
+	Flex -> Matched token: (
+	Flex -> Matched token: 10
+	Flex -> Matched token: -
+	Flex -> Matched token: x
+	Flex -> Matched token: )
+	Flex -> Matched token: /
+	Line 64 at lexeme '/' : syntax error
+	Flex -> Matched token: y
+	Flex -> Matched token: )
+	Flex -> Matched token: *
+	Flex -> Matched token: a
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\nNumber Z : %d"
+	Line 65 at lexeme '"\nNumber Z : %d"' : syntax error
+	Flex -> Matched token: ,
+	Flex -> Matched token: z
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: a
+	Flex -> Matched token: *
+	Flex -> Matched token: =
+	Line 66 at lexeme '=' : syntax error
+	Flex -> Matched token: (
+	Flex -> Matched token: -
+	Flex -> Matched token: 1
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: i
+	Line 67 at lexeme '++' : syntax error
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 68 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\n\n"
+	Line 69 at lexeme '"\n\n"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: int
+	Flex -> Matched token: A
+	Flex -> Matched token: [
+	Line 71 at lexeme '[' : syntax error
+	Flex -> Matched token: 2
+	Flex -> Matched token: ]
+	Flex -> Matched token: =
+	Flex -> Matched token: {
+	Flex -> Matched token: 17
+	Flex -> Matched token: ,
+	Flex -> Matched token: 22
+	Flex -> Matched token: }
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: int
+	Flex -> Matched token: B
+	Flex -> Matched token: [
+	Line 72 at lexeme '[' : syntax error
+	Flex -> Matched token: 4
+	Flex -> Matched token: ]
+	Flex -> Matched token: =
+	Flex -> Matched token: {
+	Flex -> Matched token: 31
+	Flex -> Matched token: ,
+	Flex -> Matched token: 56
+	Flex -> Matched token: ,
+	Flex -> Matched token: 87
+	Flex -> Matched token: ,
+	Flex -> Matched token: 102
+	Flex -> Matched token: }
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: int
+	Flex -> Matched token: sizeA
+	Flex -> Matched token: =
+	Line 73 at lexeme '=' : syntax error
+	Flex -> Matched token: (
+	Flex -> Matched token: A
+	Flex -> Matched token: )
+	Flex -> Matched token: /
+	Flex -> Matched token: (
+	Flex -> Matched token: A
+	Flex -> Matched token: [
+	Flex -> Matched token: 0
+	Flex -> Matched token: ]
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: int
+	Flex -> Matched token: sizeB
+	Flex -> Matched token: =
+	Line 74 at lexeme '=' : syntax error
+	Flex -> Matched token: (
+	Flex -> Matched token: B
+	Flex -> Matched token: )
+	Flex -> Matched token: /
+	Flex -> Matched token: (
+	Flex -> Matched token: B
+	Flex -> Matched token: [
+	Flex -> Matched token: 0
+	Flex -> Matched token: ]
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: int
+	Flex -> Matched token: C
+	Flex -> Matched token: [
+	Line 75 at lexeme '[' : syntax error
+	Flex -> Matched token: 6
+	Flex -> Matched token: ]
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: concat
+	Flex -> Matched token: (
+	Flex -> Matched token: A
+	Flex -> Matched token: ,
+	Flex -> Matched token: sizeA
+	Flex -> Matched token: ,
+	Line 76 at lexeme ',' : syntax error
+	Flex -> Matched token: B
+	Flex -> Matched token: ,
+	Flex -> Matched token: sizeB
+	Flex -> Matched token: ,
+	Flex -> Matched token: C
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "The array C contains : \n"
+	Line 78 at lexeme '"The array C contains : \n"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: for
+	Flex -> Matched token: (
+	Flex -> Matched token: i
+	Flex -> Matched token: =
+	Flex -> Matched token: 0
+	Flex -> Matched token: ;
+	Flex -> Matched token: i
+	Flex -> Matched token: <
+	Flex -> Matched token: 6
+	Flex -> Matched token: ;
+	Flex -> Matched token: i
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	Line 80 at lexeme '
+' : syntax error
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%d  "
+	Line 80 at lexeme '"%d  "' : syntax error
+	Flex -> Matched token: ,
+	Flex -> Matched token: C
+	Flex -> Matched token: [
+	Flex -> Matched token: i
+	Flex -> Matched token: ]
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 81 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\n"
+	Line 83 at lexeme '"\n"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: if
+	Flex -> Matched token: (
+	Flex -> Matched token: x
+	Flex -> Matched token: >
+	Flex -> Matched token: y
+	Flex -> Matched token: &&
+	Flex -> Matched token: y
+	Flex -> Matched token: >
+	Flex -> Matched token: 2
+	Flex -> Matched token: &&
+	Flex -> Matched token: x
+	Flex -> Matched token: >
+	Flex -> Matched token: 4
+	Flex -> Matched token: )
+	Line 85 at lexeme ')' : syntax error
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\nX is bigger than Y, X>4 and Y>2!!!!!\n"
+	Line 86 at lexeme '"\nX is bigger than Y, X>4 and Y>2!!!!!\n"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 87 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Line 88 at lexeme 'else' : syntax error
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\nX isn't bigger than Y or X>4 or Y>2!!!!!\n"
+	Line 89 at lexeme '"\nX isn't bigger than Y or X>4 or Y>2!!!!!\n"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 90 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: int
+	Flex -> Matched token: century
+	Flex -> Matched token: ,
+	Line 92 at lexeme ',' : syntax error
+	Flex -> Matched token: day
+	Flex -> Matched token: ,
+	Flex -> Matched token: month
+	Flex -> Matched token: ,
+	Flex -> Matched token: year
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: float
+	Flex -> Matched token: temperature
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\ntype a century: "
+	Line 94 at lexeme '"\ntype a century: "' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: scanf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%d"
+	Line 95 at lexeme '"%d"' : syntax error
+	Flex -> Matched token: ,
+	Line 95 at lexeme '&' : Unrecognized character(s) encountered!
+		34 character(s) ignored so far
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "type a day: "
+	Line 95 at lexeme '"type a day: "' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: scanf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%d"
+	Line 96 at lexeme '"%d"' : syntax error
+	Flex -> Matched token: ,
+	Line 96 at lexeme '&' : Unrecognized character(s) encountered!
+		40 character(s) ignored so far
+	ERROR !
+	Flex -> Matched token: while
+	Flex -> Matched token: (
+	Flex -> Matched token: day
+	Flex -> Matched token: <
+	Flex -> Matched token: 1
+	Flex -> Matched token: ||
+	Flex -> Matched token: day
+	Flex -> Matched token: >
+	Flex -> Matched token: 31
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	Line 97 at lexeme '
+' : syntax error
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "WRONG DAY! TRY AGAIN!\n"
+	Line 97 at lexeme '"WRONG DAY! TRY AGAIN!\n"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: scanf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%d"
+	Line 98 at lexeme '"%d"' : syntax error
+	Flex -> Matched token: ,
+	Line 98 at lexeme '&' : Unrecognized character(s) encountered!
+		46 character(s) ignored so far
+	ERROR !
+	Flex -> Matched token: }
+	Line 98 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "type a month: "
+	Line 99 at lexeme '"type a month: "' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: scanf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%d"
+	Line 100 at lexeme '"%d"' : syntax error
+	Flex -> Matched token: ,
+	Line 100 at lexeme '&' : Unrecognized character(s) encountered!
+		54 character(s) ignored so far
+	ERROR !
+	Flex -> Matched token: while
+	Flex -> Matched token: (
+	Flex -> Matched token: month
+	Flex -> Matched token: <
+	Flex -> Matched token: 1
+	Flex -> Matched token: ||
+	Flex -> Matched token: month
+	Flex -> Matched token: >
+	Flex -> Matched token: 12
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	Line 101 at lexeme '
+' : syntax error
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "WRONG MONTH! TRY AGAIN!\n"
+	Line 101 at lexeme '"WRONG MONTH! TRY AGAIN!\n"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: scanf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%d"
+	Line 102 at lexeme '"%d"' : syntax error
+	Flex -> Matched token: ,
+	Line 102 at lexeme '&' : Unrecognized character(s) encountered!
+		62 character(s) ignored so far
+	ERROR !
+	Flex -> Matched token: }
+	Line 102 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "type a year: "
+	Line 103 at lexeme '"type a year: "' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: scanf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%d"
+	Line 104 at lexeme '"%d"' : syntax error
+	Flex -> Matched token: ,
+	Line 104 at lexeme '&' : Unrecognized character(s) encountered!
+		69 character(s) ignored so far
+	ERROR !
+	Flex -> Matched token: while
+	Flex -> Matched token: (
+	Flex -> Matched token: year
+	Flex -> Matched token: <
+	Flex -> Matched token: 1000
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	Line 105 at lexeme '
+' : syntax error
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "TOO OLD! TRY AGAIN!\n"
+	Line 105 at lexeme '"TOO OLD! TRY AGAIN!\n"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: scanf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%d"
+	Line 106 at lexeme '"%d"' : syntax error
+	Flex -> Matched token: ,
+	Line 106 at lexeme '&' : Unrecognized character(s) encountered!
+		76 character(s) ignored so far
+	ERROR !
+	Flex -> Matched token: }
+	Line 106 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "type a temperature: "
+	Line 107 at lexeme '"type a temperature: "' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: scanf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%f"
+	Line 108 at lexeme '"%f"' : syntax error
+	Flex -> Matched token: ,
+	Line 108 at lexeme '&' : Unrecognized character(s) encountered!
+		90 character(s) ignored so far
+	ERROR !
+	Flex -> Matched token: while
+	Flex -> Matched token: (
+	Flex -> Matched token: temperature
+	Flex -> Matched token: <
+	Flex -> Matched token: -
+	Line 108 at lexeme '-' : syntax error
+	Flex -> Matched token: 10
+	Flex -> Matched token: ||
+	Flex -> Matched token: temperature
+	Flex -> Matched token: >
+	Flex -> Matched token: 45
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "WRITE A REALISTIC NUMBER!\n"
+	Line 109 at lexeme '"WRITE A REALISTIC NUMBER!\n"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: scanf
+	Flex -> Matched token: (
+	Flex -> Matched token: "%f"
+	Line 110 at lexeme '"%f"' : syntax error
+	Flex -> Matched token: ,
+	Line 110 at lexeme '&' : Unrecognized character(s) encountered!
+		104 character(s) ignored so far
+	ERROR !
+	Flex -> Matched token: }
+	Line 110 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: if
+	Flex -> Matched token: (
+	Flex -> Matched token: century
+	Flex -> Matched token: >
+	Flex -> Matched token: 20
+	Flex -> Matched token: &&
+	Flex -> Matched token: day
+	Flex -> Matched token: <=
+	Flex -> Matched token: 5
+	Flex -> Matched token: &&
+	Flex -> Matched token: month
+	Flex -> Matched token: >=
+	Flex -> Matched token: 3
+	Flex -> Matched token: &&
+	Flex -> Matched token: year
+	Flex -> Matched token: ==
+	Flex -> Matched token: 2024
+	Flex -> Matched token: &&
+	Flex -> Matched token: temperature
+	Flex -> Matched token: >=
+	Flex -> Matched token: 25
+	Flex -> Matched token: )
+	Line 112 at lexeme ')' : syntax error
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "\nToday is %d/%d/%d \n\n"
+	Line 113 at lexeme '"\nToday is %d/%d/%d \n\n"' : syntax error
+	Flex -> Matched token: ,
+	Flex -> Matched token: day
+	Flex -> Matched token: ,
+	Flex -> Matched token: month
+	Flex -> Matched token: ,
+	Flex -> Matched token: year
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: if
+	Flex -> Matched token: (
+	Flex -> Matched token: temperature
+	Flex -> Matched token: >=
+	Flex -> Matched token: 20
+	Flex -> Matched token: )
+	Flex -> Matched token: {
+	Flex -> Matched token: 
+
+	Line 115 at lexeme '
+' : syntax error
+	ERROR !
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "Weather temperature in Greece is HIGH!\n"
+	Line 115 at lexeme '"Weather temperature in Greece is HIGH!\n"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 116 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: }
+	Line 117 at lexeme '}' : syntax error
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: 
+
+	Flex -> Matched token: printf
+	Flex -> Matched token: (
+	Flex -> Matched token: "------------------------------"
+	Line 119 at lexeme '"------------------------------"' : syntax error
+	Flex -> Matched token: )
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	ERROR !
+	Flex -> Matched token: return
+	Flex -> Matched token: 0
+	Flex -> Matched token: ;
+	Flex -> Matched token: 
+
+	Flex -> Matched token: }
+	Line 121 at lexeme '}' : syntax error
+		Bison -> PARSING FAILED (104 syntax error(s) found).
+
+Correct Words: 358
+Correct Expressions: 11
+Wrong Words: 13
+Wrong Expressions: 104

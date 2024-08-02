@@ -1,0 +1,113 @@
+func summary(int varA , int varB)
+{
+    print("\nSummary = d" , varA + varB);
+}
+
+print("\nSubstraction = d" , varA - varB);
+
+func substraction(int varA , int varB)
+{
+    print("\nSubstraction = d" , varA - varB);
+}
+
+func multiply(int varA , int varB)
+{
+    print("\nMultiply = d" , varA * varB);
+}
+
+func division(int varA , int varB)
+{
+    print("\nDivision(x/y) = d" , varA / varB);
+    print("\nDivision(y/x) = d" , varB / varA);
+}
+
+func main(int argc, int argv)
+{
+	int x;
+    int y;
+    int z,a;
+    
+    int result_cmp;
+	print("type x:");
+	scan(x);
+	print("type y:");
+	scan(y);
+    summary(x,y);
+	substraction(x,y);
+    multiply(x,y);
+    division(x,y);
+    print("\n");
+    int word1[50];
+    print("type a word now : ");
+    scan(word1);
+	print("\nThe length of word is : zu \n", len(word1));
+    int word2[50];
+    print("\ntype another word : ");
+    scan(word2);
+/*	result_cmp= cmp(word1,word2);
+    if(result_cmp == 0)print("The words are equal\n");
+	if(result_cmp > 0)print("The first word is greater than the second word\n");
+	if(result_cmp < 0)print("The first word is less than the second word\n");
+*/
+	int i=0;
+	z=2;
+    a=1;
+    while(i < 3)
+    {
+        z=((10-x)/y )* a;
+        print( "\nNumber Z : d", z);
+        a=a*(-1);
+		i=i+1;
+    }
+    print("\n\n");
+
+    int A = [17, 22];
+    int B = [31, 56, 87, 102];
+    int C[6];
+
+    print("\n");
+
+    if(x>y)print("X is bigger than Y!!!!!");
+	if(x==y)print("X is equal to Y!!!!!");
+	if(x<=y)print("X isn't bigger than Y!!!!!");
+	
+    int century, day, month, year;
+    float temperature;
+    print("\ntype a century: ");
+    scan(century);
+    print("type a day: ");
+    scan(day);
+    while(day<1 || day>31)
+    {
+        print("WRONG DAY! TRY AGAIN!\n");
+        scan(day);
+    }
+    print("type a month: ");
+    scan(month);
+    while(month<1 || month>12)
+    {
+        print("WRONG MONTH! TRY AGAIN!\n");
+        scan(month);
+    }
+    print("type a year: ");
+    scan(year);
+    while(year<1000)
+    {
+        print("TOO OLD! TRY AGAIN!\n");
+        scan(year);
+    }
+    print("type a temperature: ");
+    scan(temperature);
+    while(temperature < 10 || temperature>45)
+    {
+        print("WRITE A REALISTIC NUMBER!\n");
+        scan(temperature);
+    }
+
+	if(century>20 && day<=5 \
+		&& month>=3 && year==2024)print("Today is /d \n", day);
+	if(temperature>=20)print("Weather temperature in Greece is HIGH!\n");
+
+	print("------------------------------");
+	return 0;
+    }

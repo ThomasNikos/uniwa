@@ -1,0 +1,14 @@
+Παραδείγματα τρεξίματος του regex, καθώς και του κώδικα fsm:
+
+aaaaaa_a2_a2
+a2a
+a2a_23a
+2aaadf
+a___.2___a
+.adfaf
+.2
+ASDFADSF
+ASDASD_
+ASDASD?
+_io
+__2

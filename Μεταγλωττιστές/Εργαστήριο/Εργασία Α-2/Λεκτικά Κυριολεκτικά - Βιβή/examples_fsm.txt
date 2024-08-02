@@ -1,0 +1,71 @@
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+"Test"
+^Z
+YES
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+"This is an example with \"
+^Z
+NO
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+"Example using \"Quotes!\""
+^Z
+YES
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+"Newline \n"
+^Z
+YES
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+"new
+line"
+fsm: in string.fsm, state 'bad' input l not accepted
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+" "
+^Z
+YES
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+"example with   tab and different characters %$#^&*"
+^Z
+YES
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+"TESTING escape sequences \\ \"example\" \n"
+^Z
+YES
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+"Wrong input
+^Z
+NO
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+Example using no quotes
+fsm: in string.fsm, state 'bad' input x not accepted
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+"Trying two strings in one line" "This is another string"
+fsm: in string.fsm, state 'bad' input " not accepted
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+"something" something "something"
+fsm: in string.fsm, state 'good' input s not accepted
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+"Using space charachter after closing the string" 
+fsm: in string.fsm, state 'bad' input \n not accepted
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+""
+^Z
+YES
+
+C:\Users\vivh\Desktop\lhsxo\metaglwttistes\A2>fsm string
+"following this will be two \n\n"
+
+^Z
+YES

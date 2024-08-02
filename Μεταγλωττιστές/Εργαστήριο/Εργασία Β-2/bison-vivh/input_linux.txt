@@ -1,0 +1,81 @@
+a=5-4;
+2 ^ 2 ;
+4 * 7 ^ 5 ;
+2 * 5 / 8 ;
+( 2 + 3 ) * 5 ;
+2 + 3 * 5 ;
+- ( 8 - 4 ) / 2 ;
+
+[ 1 ] ; 
+
+[ 1 ] + [ 2 ] ;
+
+[ 1 , 2 ] ;
+[ 1.1 , 2.3 ] ;
+[ "k" , "set" ] ;
+inta;
+
+if ( year < 1900 && month <= 12 \ 
+&& day <= 31 && hour < 24 \
+&& minute < 30 && second < 60 ) return 1 ;
+
+int a ;
+double var ;
+float c ;
+
+cmp ( "test" , "best" ) ;
+cmp ( str1 , str2 ) ;
+
+print ( "Hello World" ) ;
+// print ( x , "=" , 100 ) ;
+
+print ( cmp ( str1 , str2 ) ) ;
+print ( len ( "This is a string" ) ) ;
+
+func myfunc ( int varA , int varB )
+{
+print ( "a = " , varA ) ;
+print ( "b = " , varB ) ;
+print ( "b = " , varB ) ;
+}
+
+// Κλήση της myfunc
+myfunc ( 10 , 20 ) ;
+
+a1 * a2 ;
+a3 + a4 ;
+
+- 5 + 10 ;
+15 + a5 - 9 ;
+
+x1 = 0 ;
+x1 , x2 = 0 , 1 ;
+//x1 , list1 = 0 , [A, B, C] ;
+//x1 , list1 , string = 0 , [A, B, C] , " HELLO " ;
+
+x1 > x2 ;
+a <= b ;
+myvar == 52 ;
+
+while ( i < 10 )
+{
+print ( "i is: ", i ) ;
+i = 1 ;
+}
+while ( i < 10 )
+{
+print ( "i is: ", i ) ;
+i = 1 ;
+}
+
+for ( i = 0 ; i < 10 ; i ++ )
+{
+print ( "i = " , i ) ;
+}
+
+func myAdd ( int num1 , int num2 )
+{
+int sum ;
+sum = a + b ;
+print ( "Sum is: " , sum ) ;
+}

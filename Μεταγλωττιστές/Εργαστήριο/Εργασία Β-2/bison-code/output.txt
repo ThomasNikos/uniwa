@@ -1,0 +1,23 @@
+	Scanner returned: INTCONST (3)
+	Scanner returned: PLUS (+)
+	Scanner returned: INTCONST (2)
+	Scanner returned: NEWLINE (\n)
+5
+	Scanner returned: INTCONST (15)
+	Scanner returned: PLUS (+)
+	Scanner returned: INTCONST (25)
+	Scanner returned: PLUS (+)
+	Scanner returned: INTCONST (35)
+	Scanner returned: NEWLINE (\n)
+75
+	Scanner returned: VARIABLE (testvar)
+	Scanner returned: PLUS (+)
+	Scanner returned: INTCONST (1)
+	Scanner returned: NEWLINE (\n)
+1
+	Scanner returned: VARIABLE (var1)
+	Scanner returned: PLUS (+)
+	Scanner returned: VARIABLE (_var2)
+	Scanner returned: NEWLINE (\n)
+0
+	Scanner returned: EOF (EOF)

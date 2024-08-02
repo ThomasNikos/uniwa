@@ -1,0 +1,41 @@
+Τα λεκτικά κυριολεκτικά περικλείονται μέσα σε διπλές " αποστρόφους και περιλαμβάνουν οποιονδήποτε χαρακτήρα εκτός 
+- backslash \,		->	\\
+- νέας γραμμής \n 	->	\n
+- διπλής αποστρόφου "   ->	\"
+που για τη χρήση τους απαιτούν χρήση σειράς διαφυγής.
+Αναγνωρίζονται και επιστρέφονται ως tokens με το αναγνωριστικό όνομα string.
+
+Regular Expression !! πρέπει να είναι ανοιχτό το multiline (m) flag
+
+^("([^"\n\\]*(\\")*(\\n)*(\\\\)*)*")$ 
+^ : αρχή γραμμής - string
+" : χαρακτήρας "
+[^"\n\\]* : οποιοσδήποτε χαρακτήρας δεν είναι " , \n και \ (\\) καμία ή περισσότερες φορές
+(\\")* : χαρακτήρες \" καμία ή περισσότερες φορές 
+(\\n)* : χαρακτήρες \n καμία ή περισσότερες φορές 
+(\\\\)* : χαρακτήρες \\ καμία ή περισσότερες φορές 
+([^"\n\\]*(\\")*(\\n)*(\\\\)*)* : όλα μέσα στην παρένθεση μπορούν να επαναλαμβάνονται καμία ή περισσότερες φορές
+" : χαρακτήρας "
+$ : τέλος γραμμής 
+
+"([^"\n\\]*(\\")*(\\n)*(\\\\)*)*" oxi swsto?
+
+Test String
+
+"Test"
+"This is an example with \"
+"Example using \"Quotes!\""
+"Newline \n"
+"new
+line"
+" "
+"example with   tab and different characters %$#^&*"
+"TESTING escape sequences \\ \"example\" \n"
+"Wrong input
+Example using no quotes
+"Trying two strings in one line" "This is another string"
+"something" something "something"
+"Using space charachter after closing the string" 
+"following this will be two \n\n"
+
+

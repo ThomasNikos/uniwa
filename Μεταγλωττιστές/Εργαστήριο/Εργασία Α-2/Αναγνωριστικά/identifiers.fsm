@@ -1,0 +1,7 @@
+START=SZ
+SZ:	a-z A-Z	_		-> S0
+	* 				-> BAD
+S0:	_ 0-9 a-z A-Z	-> S0
+	*				-> BAD
+	\n				-> GOOD
+GOOD(OK):

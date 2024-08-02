@@ -1,0 +1,23 @@
+SZ:	"	-> S1 
+	*	-> BAD
+S1:	*	-> S1
+	\\	-> S2
+	\n	-> BAD
+	"	-> S6
+S2:	\\	-> S3
+	"	-> S4
+	n	-> S5
+	*	-> BAD	
+S3:	*	-> S1
+	"	-> S6
+	\n	-> BAD
+S4:	*	-> S1
+	"	-> S6
+	\n	-> BAD
+S5:	*	-> S1
+	"	-> S6
+	\n	-> BAD
+S6:	\n 	-> GOOD
+	*	-> BAD
+GOOD(OK):
+

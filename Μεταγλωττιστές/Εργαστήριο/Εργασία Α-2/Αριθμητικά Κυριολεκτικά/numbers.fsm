@@ -1,0 +1,58 @@
+START=SZ
+SZ:	1-9			-> IS1
+	0			-> IS2
+	*			-> BAD
+IS1:	0-9		-> IS1
+	E e			-> S1
+	.			-> S2
+	*			-> BAD
+	\n			-> GOOD
+IS2: x X		-> I3
+	E e			-> S1
+	.			-> S2
+	0-7			-> I5
+	*			-> BAD
+	\n			-> GOOD
+I3: a-f A-F 0-9	-> I4
+	*			-> BAD
+I4: a-f A-F 0-9	-> I4 
+	*			-> BAD
+	\n			-> GOOD
+I5:	0-7			-> I5
+	*			-> BAD
+	\n			-> GOOD
+S1:	-			-> S3
+	0-9			-> S4
+	*			-> BAD
+S2:	0-9			-> S7
+	*			-> BAD
+S3:	0-9			-> S4
+	*			-> BAD
+S4:	0-9			-> S4
+	.			-> S5
+	\n			-> GOOD
+	*			-> BAD
+S5:0-9			-> S6
+	*			-> BAD
+S6:0-9			-> S6
+	\n			-> GOOD
+	*			-> BAD
+S7:	0-9			-> S7
+	E e			-> S8
+	\n			-> GOOD
+	*			-> BAD	
+S8:	-			-> S9
+	0-9			-> S10
+	*			-> BAD
+S9:	0-9			-> S10
+	*			-> BAD
+S10:0-9			-> S10
+	.			-> S11
+	\n			-> GOOD
+	*			-> BAD
+S11:0-9			-> S12
+	*			-> BAD
+S12:0-9			-> S12
+	\n			-> GOOD
+	*			-> BAD
+GOOD(OK):
