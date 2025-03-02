@@ -1,0 +1,6 @@
+C:\Users\thoma\source\repos\Master\Payroll_Lib\Payroll_Lib\bin\Debug\Payroll_Lib.dll
+C:\Users\thoma\source\repos\Master\Payroll_Lib\Payroll_Lib\bin\Debug\Payroll_Lib.pdb
+C:\Users\thoma\source\repos\Master\Payroll_Lib\Payroll_Lib\obj\Debug\Payroll_Lib.csproj.AssemblyReference.cache
+C:\Users\thoma\source\repos\Master\Payroll_Lib\Payroll_Lib\obj\Debug\Payroll_Lib.csproj.CoreCompileInputs.cache
+C:\Users\thoma\source\repos\Master\Payroll_Lib\Payroll_Lib\obj\Debug\Payroll_Lib.dll
+C:\Users\thoma\source\repos\Master\Payroll_Lib\Payroll_Lib\obj\Debug\Payroll_Lib.pdb

@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\thoma\\OneDrive - University of West Attica\\\u03A0\u03BF\u03B9\u03CC\u03C4\u03B7\u03C4\u03B1 \u03BA\u03B1\u03B9 \u0391\u03BE\u03B9\u03BF\u03C0\u03B9\u03C3\u03C4\u03AF\u03B1 \u039B\u03BF\u03B3\u03B9\u03C3\u03BC\u03B9\u03BA\u03BF\u03CD\\\u0395\u03C1\u03B3\u03B1\u03C3\u03AF\u03B1\\\u039C\u03AD\u03C1\u03BF\u03C2 \u0392\\Master\\UnitTestPayroll\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A522AF3C-CE48-45F0-8754-40DBECDF17E1}|UnitTestPayroll\\UnitTestPayroll.csproj|c:\\users\\thoma\\onedrive - university of west attica\\\u03C0\u03BF\u03B9\u03CC\u03C4\u03B7\u03C4\u03B1 \u03BA\u03B1\u03B9 \u03B1\u03BE\u03B9\u03BF\u03C0\u03B9\u03C3\u03C4\u03AF\u03B1 \u03BB\u03BF\u03B3\u03B9\u03C3\u03BC\u03B9\u03BA\u03BF\u03CD\\\u03B5\u03C1\u03B3\u03B1\u03C3\u03AF\u03B1\\\u03BC\u03AD\u03C1\u03BF\u03C2 \u03B2\\master\\unittestpayroll\\unittestpayroll\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A522AF3C-CE48-45F0-8754-40DBECDF17E1}|UnitTestPayroll\\UnitTestPayroll.csproj|solutionrelative:unittestpayroll\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UnitTest1.cs",
+              "DocumentMoniker": "C:\\Users\\thoma\\OneDrive - University of West Attica\\\u03A0\u03BF\u03B9\u03CC\u03C4\u03B7\u03C4\u03B1 \u03BA\u03B1\u03B9 \u0391\u03BE\u03B9\u03BF\u03C0\u03B9\u03C3\u03C4\u03AF\u03B1 \u039B\u03BF\u03B3\u03B9\u03C3\u03BC\u03B9\u03BA\u03BF\u03CD\\\u0395\u03C1\u03B3\u03B1\u03C3\u03AF\u03B1\\\u039C\u03AD\u03C1\u03BF\u03C2 \u0392\\Master\\UnitTestPayroll\\UnitTestPayroll\\UnitTest1.cs",
+              "RelativeDocumentMoniker": "UnitTestPayroll\\UnitTest1.cs",
+              "ToolTip": "C:\\Users\\thoma\\OneDrive - University of West Attica\\\u03A0\u03BF\u03B9\u03CC\u03C4\u03B7\u03C4\u03B1 \u03BA\u03B1\u03B9 \u0391\u03BE\u03B9\u03BF\u03C0\u03B9\u03C3\u03C4\u03AF\u03B1 \u039B\u03BF\u03B3\u03B9\u03C3\u03BC\u03B9\u03BA\u03BF\u03CD\\\u0395\u03C1\u03B3\u03B1\u03C3\u03AF\u03B1\\\u039C\u03AD\u03C1\u03BF\u03C2 \u0392\\Master\\UnitTestPayroll\\UnitTestPayroll\\UnitTest1.cs",
+              "RelativeToolTip": "UnitTestPayroll\\UnitTest1.cs",
+              "ViewState": "AgIAANMAAAAAAAAAAAAYwNcAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-15T20:20:11.643Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{269a02dc-6af8-11d3-bdc4-00c04f688e50}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
