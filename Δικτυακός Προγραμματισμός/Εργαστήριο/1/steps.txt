@@ -1,0 +1,7 @@
+MAVEN REPOSITORY;
+
+Mariadb jdbc driver;
+
+jar;
+
+Libraries -> Add Jar -> mariadb-java-client-3.2.0.jar;

@@ -1,0 +1,12 @@
+CREATE DATABASE netprog_db_21390068;
+CREATE USER netprog_user_21390068@localhost IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON netprog_db_21390068.* TO netprog_user_21390068@localhost;
+USE netprog_db_21390068;
+CREATE TABLE IF NOT EXISTS users (
+id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+firstname VARCHAR(30),
+lastname VARCHAR(30),
+created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
+INSERT INTO users (firstname, lastname) VALUES ('Joe', 'Doe');
+INSERT INTO users (firstname, lastname) VALUES ('Netprog', 'JDBC');
