@@ -1,0 +1,670 @@
+//1
+
+x = [1 2 3 4 5 6 7 6 5 4 3 2 1];
+n = 0:length(x)-1;
+
+figure
+subplot(3,2,1)
+stem(n, x)
+title('x[n]')
+
+subplot(3,2,2)
+stem(n-5, x)
+title('x[n-5]')
+
+subplot(3,2,3)
+stem(n+4, x)
+title('x[n+4]')
+
+subplot(3,2,4)
+stem(-n, x)
+title('x[-n]')
+
+subplot(3,2,5)
+stem(n/2, x)
+title('x[n/2]')
+
+subplot(3,2,6)
+stem(2*n, x)
+title('x[2n]')
+
+
+//2
+
+AM = 2;
+AML = mod(AM, 10);
+n = -20 - mod(AML, 2) : 20 + mod(AML, 2);
+
+u = @(n) double(n >= 0);
+
+delta = @(n) double(n == 0);
+
+y = 2 * u(n - (2 + mod(AML, 5))) - 8 * delta(n - mod(AML, 4));
+
+x = zeros(size(n));
+x(n >= -5 & n <= -1) = 3 * n(n >= -5 & n <= -1);
+x(n > -1 & n <= 2) = exp(n(n > -1 & n <= 2));
+x(n > 2 & n <= 10) = sqrt(4 * sum(AM));
+
+figure
+subplot(2,1,1)
+stem(n, y)
+title('y[n]')
+
+subplot(2,1,2)
+stem(n, x)
+title('x[n]')
+
+//3
+
+n = 0:100;
+
+x1 = cos(0.2*pi*n + pi/3);
+x2 = cos(0.1*pi*n + pi/4);
+x3 = cos(0.01*n + pi/5);
+
+y = x1 + x2;
+z = x1 + x2 + x3;
+
+figure;
+subplot(3,1,1);
+plot(n, x1);
+title('Signal x1[n]');
+
+subplot(3,1,2);
+plot(n, y);
+title('Signal y[n]');
+
+subplot(3,1,3);
+plot(n, z);
+title('Signal z[n]');
+
+//4
+
+function [xe, xo, m] = ev_od(x, n)
+    xe = 0.5 * (x + fliplr(x));
+
+    xo = 0.5 * (x - fliplr(x));
+
+    m = n;
+
+    figure;
+    subplot(2,1,1);
+    stem(m, xe);
+    title('Even Part');
+
+    subplot(2,1,2);
+    stem(m, xo);
+    title('Odd Part');
+end
+
+Test:
+
+n = -10:10;
+x = sin(0.2*pi*n);
+
+[xe, xo, m] = ev_od(x, n);
+
+//5
+
+dirac = @(n) double(n == 0);
+heaviside = @(n) double(n >= 0);
+
+n = -12:12;
+
+h = sqrt(8*abs(n)) .* (2*dirac(n + 4) + (heaviside(n + 1) - 3*heaviside(n - 2)));
+
+x = 4*dirac(n + 3) + 2*dirac(n) - dirac(n - 1) + 5*dirac(n - 3);
+
+y = conv(h, x);
+
+figure;
+subplot(3,1,1);
+stem(n, h);
+title('Impulse Response');
+
+subplot(3,1,2);
+stem(n, x);
+title('Input');
+
+subplot(3,1,3);
+stem(n, y(1:length(n)));
+title('Output');
+
+//6
+
+function y = conv_toeplitz(h, x)
+    H = toeplitz([h; zeros(length(x)-1, 1)], [h(1) zeros(1, length(x)-1)]);
+
+    y = H * x;
+end
+
+//7
+
+n = -10:10;
+x = 4*(n == -1) + 9*(n == 0) - 2*(n == 2);
+y = (n/6) .* ((n >= -2) & (n <= 3));
+
+z = conv_toeplitz(x, y);
+
+n_z = (2*min(n)):(2*max(n));
+
+figure;
+subplot(3,1,1);
+stem(n, x);
+title('x[n]');
+subplot(3,1,2);
+stem(n, y);
+title('y[n]');
+subplot(3,1,3);
+stem(n_z, z);
+title('z[n]');
+
+z_verify = conv(x, y);
+disp('Difference between conv_toeplitz and conv:');
+disp(norm(z - z_verify));
+
+//8
+
+n = -5:10;
+x1 = [2 2 3 3 4 zeros(1, length(n)-5)];
+x2 = (n >= 0) - (n >= 6);
+a = 4; b = 5;
+
+y1 = 4*n.^2 .* x1;
+y2 = 4*n.^2 .* x2;
+y = a*y1 + b*y2;
+
+y_check = 4*n.^2 .* (a*x1 + b*x2);
+
+figure;
+subplot(2,1,1);
+stem(n, y);
+title('y[n]');
+subplot(2,1,2);
+stem(n, y_check);
+title('y_check[n]');
+
+//9
+
+h = impz([0.5 0 -1], [1 3 -5], n);
+
+if sum(abs(h)) < inf
+    disp('The system is BIBO stable');
+else
+    disp('The system is not BIBO stable');
+end
+
+x = [2 1 1 1 1 0 0 1 1 0 0 2];
+y = filter([0.5 0 -1], [1 3 -5], x);
+y_conv = conv(x, h);
+
+x_cos = 2*cos(3*pi*n);
+y_cos = filter([0.5 0 -1], [1 3 -5], x_cos);
+
+figure;
+subplot(4,1,1);
+stem(n, h);
+title('Impulse Response');
+subplot(4,1,2);
+stem(y);
+title('Output using filter');
+subplot(4,1,3);
+stem(y_conv);
+title('Output using conv');
+subplot(4,1,4);
+stem(y_cos);
+title('Output for cos input');
+The system is BIBO stable
+
+//10
+
+(a)
+a = [1, -0.4];
+b = [1, 0, 0.7];
+n = -20:20;
+x = 2 * (n == -1) + 4 * (n == 0) + 8 * (n == 1) + 9 * (n == 2);
+y = filter(b, a, x);
+figure;
+subplot(2,1,1);
+stem(n, x, 'b', 'LineWidth', 1.5);
+title('Input Signal x[n]');
+subplot(2,1,2);
+stem(n, y, 'r', 'LineWidth', 1.5);
+title('Output Signal y[n]');
+
+(b)
+[h, t] = impz(b, a, 40);
+figure;
+stem(t, h, 'LineWidth', 1.5);
+title('Shock Response of the System');
+xlabel('n');
+ylabel('h[n]');
+
+//11
+
+n = 0:40;
+x = 2*cos(pi*n/8) + randn(size(n));
+y = filter(ones(1, 4)/4, 1, x);
+figure;
+subplot(3, 1, 1);
+plot(n, 2*cos(pi*n/8));
+title('Noiseless signal');
+subplot(3, 1, 2);
+plot(n, x);
+title('Noisy signal');
+subplot(3, 1, 3);
+plot(n, y);
+title('Output of the system');
+
+y = filter(ones(1, 8)/8, 1, x);
+figure;
+subplot(3, 1, 1);
+plot(n, 2*cos(pi*n/8));
+title('Noiseless signal');
+subplot(3, 1, 2);
+plot(n, x);
+title('Noisy signal');
+subplot(3, 1, 3);
+plot(n, y);
+title('Output of the system');
+
+//12
+
+b = [3, 0, 0, -1]; % Coefficients of the system
+
+n = -10:10;
+x = (n >= 0); % Unit step sequence
+
+y = filter(b, 1, x);
+
+figure;
+stem(n, y, 'LineWidth', 1.5);
+title('Step Response of the System');
+xlabel('n');
+ylabel('y[n]');
+
+
+//13
+
+n = 0:7;
+x = (1/3).^n;
+
+[b,a] = residue([1 0],[1 -1.8 -0.8]);
+n = 0:7;
+y = b(1)*a(1).^n + b(2)*a(2).^n;
+
+//14
+
+[b,a] = residue([1 1 1],[1 0.9 0.2 0]);
+
+X(z) = b(1)/(z - a(1)) + b(2)/(z - a(2)) + b(3)/(z - a(3))
+
+
+//17
+
+a = [1 -0.9];
+b = [1];
+
+sys_tf = tf(b, a, 1);
+
+disp('Transfer Function:');
+disp(sys_tf);
+
+sys_impulse_response = impulse(sys_tf);
+
+figure;
+stem(sys_impulse_response);
+title('Shock Response');
+xlabel('n');
+ylabel('h(n)');
+
+figure;
+zplane(b, a);
+title('Zero-Pole Diagram');
+
+zeros = roots(b);
+poles = roots(a);
+
+pole_sensitivity = max(abs(poles));
+
+disp(['Pole Sensitivity: ', num2str(pole_sensitivity)]);
+
+//18
+
+n = 0:10;
+
+u_n = ones(size(n));
+
+y_n = u_n;
+
+figure;
+stem(n, u_n, 'r', 'LineWidth', 2, 'MarkerSize', 8, 'DisplayName', 'u(n)');
+hold on;
+stem(n, y_n, 'b', 'LineWidth', 2, 'MarkerSize', 8, 'DisplayName', 'y(n)');
+title('Input and Output Signals');
+xlabel('n');
+ylabel('Amplitude');
+legend('show');
+grid on;
+
+//19
+
+//20
+
+b = [1 1];
+a = 1;
+figure;
+freqz(b, a);
+title('Frequency Response of the System');
+xlabel('Normalized Frequency (\pi radians/sample)');
+ylabel('Magnitude');
+grid on;
+
+//21
+
+n = 0:15;
+x = n;
+
+N_16 = 16;
+omega = 0:0.01:2*pi;
+X_DTFT_16 = freqz(x, 1, omega);
+
+X_DFT_16 = fft(x, N_16);
+
+N_32 = 32;
+X_DFT_32 = fft(x, N_32);
+
+figure;
+subplot(3,1,1);
+plot(omega, abs(X_DTFT_16));
+title('DTFT for N=16');
+xlabel('\omega');
+ylabel('|X(e^{j\omega})|');
+
+subplot(3,1,2);
+stem(0:N_16-1, abs(X_DFT_16));
+title('DFT for N=16');
+xlabel('k');
+ylabel('|X[k]|');
+
+subplot(3,1,3);
+stem(0:N_32-1, abs(X_DFT_32));
+title('DFT for N=32');
+xlabel('k');
+ylabel('|X[k]|');
+
+sgtitle('DTFT and DFT of x[n]=n');
+
+//23
+
+N1 = 512;
+N2 = 512;
+
+n1 = -10:10;
+x1 = 2 * cos(3 * pi * n1 / 4);
+
+X1 = fft(x1, N1);
+
+f1 = (0:N1-1) * (1/(N1 * (n1(2) - n1(1))));
+
+n2 = -40:40;
+x2 = 2 * cos(3 * pi * n2 / 4);
+
+X2 = fft(x2, N2);
+
+f2 = (0:N2-1) * (1/(N2 * (n2(2) - n2(1))));
+
+figure;
+subplot(2, 1, 1);
+stem(f1, abs(X1), 'b', 'LineWidth', 1.5);
+title('For -10 <= n <= 10');
+xlabel('Frequency');
+ylabel('|X(f)|');
+grid on;
+
+subplot(2, 1, 2);
+stem(f2, abs(X2), 'r', 'LineWidth', 1.5);
+title('For -40 <= n <= 40');
+xlabel('Frequency');
+ylabel('|X(f)|');
+grid on;
+
+sgtitle('x[n] = 2cos(3\pin/4)');
+
+//24
+
+(a)
+
+function y = linear_convolution(x1, x2)    
+    N = length(x1) + length(x2) - 1;
+    x1_padded = [x1, zeros(1, N - length(x1))];
+    x2_padded = [x2, zeros(1, N - length(x2))];
+    X1 = fft(x1_padded);
+    X2 = fft(x2_padded);
+    Y = X1 .* X2;
+    y = ifft(Y);
+end
+
+(b)
+
+sizes = 1000:1000:100000;
+conv_times_conv = zeros(size(sizes));
+conv_times_fft = zeros(size(sizes));
+
+for i = 1:length(sizes)
+    x = rand(1, sizes(i));
+    tic;
+    conv(x, x);
+    conv_times_conv(i) = toc;
+    tic;
+    linear_convolution(x, x);
+    conv_times_fft(i) = toc;
+end
+
+figure;
+plot(sizes, conv_times_conv, 'b', 'LineWidth', 1.5);
+hold on;
+plot(sizes, conv_times_fft, 'r', 'LineWidth', 1.5);
+xlabel('Signal Size');
+ylabel('Execution Time (s)');
+title('Convolution Speed Comparison');
+legend('conv()', 'fft() & ifft()', 'Location', 'Best');
+grid on;
+
+
+//25
+
+n = 0:6;
+x = (n + 1) .* (heaviside(n) - heaviside(n - 4));
+y = heaviside(n) - heaviside(n - 7);
+linear_conv_result = linear_convolution(x, y);
+conv_result = conv(x, y);
+disp('Linear Convolution using fft() and ifft():');
+disp(linear_conv_result);
+disp('Linear Convolution using conv():');
+disp(conv_result);
+
+++Results++
+
+Linear Convolution using fft() and ifft():
+  Columns 1 through 9
+
+    0.2500    1.5000    4.0000    7.5000   10.7500   12.0000   12.0000   11.5000    9.5000
+
+  Columns 10 through 13
+
+    6.5000    2.5000    0.0000    0.0000
+
+Linear Convolution using conv():
+  Columns 1 through 9
+
+    0.2500    1.5000    4.0000    7.5000   10.7500   12.0000   12.0000   11.5000    9.5000
+
+  Columns 10 through 13
+
+    6.5000    2.5000         0         0
+
+//26
+
+n_x = 0:5;
+n_w = 0:3;
+x = [1, 0, -2, 0, 0, 4];
+w = [1, 1, 2, -1];
+convolution_time = cconv(x, w, length(n_x));
+disp('Cyclic Convolution in the Time Domain:');
+disp(convolution_time);
+
+Cyclic Convolution in the Time Domain:
+    5     9    -4    -3    -4     6
+
+N_fft = 2^nextpow2(length(n_x) + length(n_w) - 1);
+X = fft(x, N_fft);
+W = fft(w, N_fft);
+convolution_fft = ifft(X .* W);
+convolution_fft = convolution_fft(1:length(n_x) + length(n_w) - 1);
+disp('Cyclic Convolution using FFT and IFFT:');
+disp(convolution_fft);
+
+Cyclic Convolution using FFT and IFFT:
+    1.0000    1.0000   -0.0000   -3.0000   -4.0000    6.0000    4.0000    8.0000   -4.0000
+
+
+
+//27
+
+% Given sequences
+x = [1, 0, -2, 0, 0, 4];
+w = [1, 1, 2, -1];
+
+% Calculate the cyclic convolution using the cconv function
+cyclic_convolution_8 = cconv(x, w, 8);
+
+disp('Cyclic Convolution (8 points):');
+disp(cyclic_convolution_8);
+
+Cyclic Convolution (8 points):
+   -3.0000    1.0000    0.0000   -3.0000   -4.0000    6.0000    4.0000    8.0000
+
+% Calculate the linear convolution using conv
+linear_convolution_time = conv(x, w);
+
+disp('Linear Convolution in Time Domain:');
+disp(linear_convolution_time);
+
+Linear Convolution in Time Domain:
+     1     1     0    -3    -4     6     4     8    -4
+
+
+% Calculate the linear convolution using FFT and IFFT
+N_fft = 2^nextpow2(length(x) + length(w) - 1);
+X = fft(x, N_fft);
+W = fft(w, N_fft);
+
+linear_convolution_fft = ifft(X .* W);
+
+disp('Linear Convolution using FFT and IFFT:');
+disp(linear_convolution_fft);
+
+Linear Convolution using FFT and IFFT:
+  Columns 1 through 9
+
+    1.0000    1.0000   -0.0000   -3.0000   -4.0000    6.0000    4.0000    8.0000   -4.0000
+
+  Columns 10 through 16
+
+    0.0000    0.0000    0.0000   -0.0000         0         0    0.0000
+
+
+//28
+
+n = 0:100;
+x_n = 1.01 .^ n;
+
+energy_time_domain = sum(abs(x_n).^2);
+
+disp('Energy in the Discrete Time Domain:');
+disp(energy_time_domain);
+Energy in the Discrete Time Domain:
+  321.5458
+
+N_fft = 2^nextpow2(length(x_n));
+X_k = fft(x_n, N_fft);
+
+energy_freq_domain = sum(abs(X_k).^2) / N_fft;
+
+disp('Energy in the Frequency Domain (using FFT):');
+disp(energy_freq_domain);
+Energy in the Frequency Domain (using FFT):
+  321.5458
+
+//29
+
+n = -5000:5000;
+
+u_n = zeros(size(n));
+u_n(n >= 0) = 1;
+
+P_theoretical = 1;
+
+P_calculated = 1 / (length(n) + 1) * sum(abs(u_n).^2);
+
+disp('Theoretical Power:');
+disp(P_theoretical);
+
+disp('Calculated Power:');
+disp(P_calculated);
+
+Theoretical Power:
+     1
+
+Calculated Power:
+    0.5000
+
+//30
+
+% Define parameters
+N = 21;  % Length of sequences
+a = 4;
+b = 5;
+
+x1_n = randn(1, N);
+x2_n = randn(1, N);
+
+y_n = a * x1_n + b * x2_n;
+
+X1_w = fft(x1_n);
+X2_w = fft(x2_n);
+
+Y_w = fft(y_n);
+
+aX1_w_plus_bX2_w = a * X1_w + b * X2_w;
+
+isLinearityValid = isequal(round(Y_w, 10), round(aX1_w_plus_bX2_w, 10));
+
+disp(['Is Linearity Valid: ', num2str(isLinearityValid)]);
+disp(' ');
+
+n = 0:N-1;
+subplot(3, 1, 1);
+stem(n, x1_n, 'r', 'LineWidth', 2, 'MarkerSize', 8);
+title('Sequence x1[n]');
+xlabel('n');
+ylabel('Amplitude');
+
+subplot(3, 1, 2);
+stem(n, x2_n, 'b', 'LineWidth', 2, 'MarkerSize', 8);
+title('Sequence x2[n]');
+xlabel('n');
+ylabel('Amplitude');
+
+subplot(3, 1, 3);
+stem(n, y_n, 'g', 'LineWidth', 2, 'MarkerSize', 8);
+title('Linear Combination (ax1[n] + bx2[n])');
+xlabel('n');
+ylabel('Amplitude');
+
+sgtitle('Linearity Property Demonstration');
+
+
+Is Linearity Valid: 1
