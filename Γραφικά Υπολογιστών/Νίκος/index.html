@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <title>Ρομπότ με Υφές</title>
+  <script src="gl-matrix-min.js"></script>
+  <script src="webgl-debug.js"></script>
+  <style>
+    body { background: #111; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    canvas { display: block; margin: 0 auto; background: #222; }
+    .controls { max-width: 500px; margin: 20px auto; text-align: center; }
+  </style>
+
+  <script id="vShader" type="x-shader/x-vertex">
+    attribute vec4 aVertexPosition;
+    attribute vec2 aTextureCoord;
+    uniform mat4 uVerticesTransform;
+    varying vec2 vTexCoord;
+    void main(void) {
+      gl_Position = uVerticesTransform * aVertexPosition;
+      vTexCoord = aTextureCoord;
+    }
+  </script>
+
+  <script id="fShader" type="x-shader/x-fragment">
+    precision mediump float;
+    varying vec2 vTexCoord;
+    uniform sampler2D uSampler;
+    void main(void) {
+      gl_FragColor = texture2D(uSampler, vTexCoord);
+    }
+  </script>
+
+  <script>
+    let gl, canvas, shadersProgram;
+    let vertexBuffer, textureCoordBuffer;
+    let vertexPositionAttributePointer, textureCoordAttributePointer;
+    let verticesTransformUniformPointer, uSamplerPointer;
+
+    let metalTexture, headTexture;
+    let isAnimating = false;
+    let animationFrameId = null;
+    let cameraAngle = 0;
+    let cameraHeight = 0;
+    let heightDirection = 1;
+
+    function createGLContext(canvas) {
+      return canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    }
+
+    function createCompileShader(type, source) {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        alert("Shader error: " + gl.getShaderInfoLog(shader));
+        return null;
+      }
+      return shader;
+    }
+
+    function initShaders() {
+      const vs = createCompileShader(gl.VERTEX_SHADER, document.getElementById("vShader").textContent);
+      const fs = createCompileShader(gl.FRAGMENT_SHADER, document.getElementById("fShader").textContent);
+
+      shadersProgram = gl.createProgram();
+      gl.attachShader(shadersProgram, vs);
+      gl.attachShader(shadersProgram, fs);
+      gl.linkProgram(shadersProgram);
+
+      if (!gl.getProgramParameter(shadersProgram, gl.LINK_STATUS)) {
+        alert("Shader link error");
+      }
+
+      gl.useProgram(shadersProgram);
+
+      vertexPositionAttributePointer = gl.getAttribLocation(shadersProgram, "aVertexPosition");
+      gl.enableVertexAttribArray(vertexPositionAttributePointer);
+
+      textureCoordAttributePointer = gl.getAttribLocation(shadersProgram, "aTextureCoord");
+      gl.enableVertexAttribArray(textureCoordAttributePointer);
+
+      verticesTransformUniformPointer = gl.getUniformLocation(shadersProgram, "uVerticesTransform");
+      uSamplerPointer = gl.getUniformLocation(shadersProgram, "uSampler");
+    }
+
+    function initBuffers() {
+      const vertices = new Float32Array([
+        // Front
+        -0.5,-0.5, 0.5,1,  0.5,-0.5, 0.5,1,  0.5, 0.5, 0.5,1,
+        -0.5,-0.5, 0.5,1,  0.5, 0.5, 0.5,1, -0.5, 0.5, 0.5,1,
+        // Back
+        -0.5,-0.5,-0.5,1, -0.5, 0.5,-0.5,1,  0.5, 0.5,-0.5,1,
+        -0.5,-0.5,-0.5,1,  0.5, 0.5,-0.5,1,  0.5,-0.5,-0.5,1,
+        // Top
+        -0.5, 0.5,-0.5,1, -0.5, 0.5, 0.5,1,  0.5, 0.5, 0.5,1,
+        -0.5, 0.5,-0.5,1,  0.5, 0.5, 0.5,1,  0.5, 0.5,-0.5,1,
+        // Bottom
+        -0.5,-0.5,-0.5,1,  0.5,-0.5,-0.5,1,  0.5,-0.5, 0.5,1,
+        -0.5,-0.5,-0.5,1,  0.5,-0.5, 0.5,1, -0.5,-0.5, 0.5,1,
+        // Right
+         0.5,-0.5,-0.5,1,  0.5, 0.5,-0.5,1,  0.5, 0.5, 0.5,1,
+         0.5,-0.5,-0.5,1,  0.5, 0.5, 0.5,1,  0.5,-0.5, 0.5,1,
+        // Left
+        -0.5,-0.5,-0.5,1, -0.5,-0.5, 0.5,1, -0.5, 0.5, 0.5,1,
+        -0.5,-0.5,-0.5,1, -0.5, 0.5, 0.5,1, -0.5, 0.5,-0.5,1,
+      ]);
+
+      const texCoords = new Float32Array([
+        // Front
+        0,0, 1,0, 1,1,  0,0, 1,1, 0,1,
+        // Back
+        0,0, 0,1, 1,1,  0,0, 1,1, 1,0,
+        // Top
+        0,1, 0,0, 1,0,  0,1, 1,0, 1,1,
+        // Bottom
+        1,1, 0,1, 0,0,  1,1, 0,0, 1,0,
+        // Right
+        0,0, 1,0, 1,1,  0,0, 1,1, 0,1,
+        // Left
+        1,0, 1,1, 0,1,  1,0, 0,1, 0,0,
+      ]);
+
+      vertexBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+      textureCoordBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, texCoords, gl.STATIC_DRAW);
+    }
+
+    function loadTexture(url) {
+      const texture = gl.createTexture();
+      const image = new Image();
+      image.onload = () => {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+        gl.generateMipmap(gl.TEXTURE_2D);
+      };
+      image.src = url;
+      return texture;
+    }
+
+    function drawTexturedCube(texture, sx, sy, sz, tx, ty, tz, finalMatrix) {
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.uniform1i(uSamplerPointer, 0);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+      gl.vertexAttribPointer(vertexPositionAttributePointer, 4, gl.FLOAT, false, 0, 0);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+      gl.vertexAttribPointer(textureCoordAttributePointer, 2, gl.FLOAT, false, 0, 0);
+
+      const scale = glMatrix.mat4.create();
+      const translate = glMatrix.mat4.create();
+      const model = glMatrix.mat4.create();
+
+      glMatrix.mat4.fromScaling(scale, [sx, sy, sz]);
+      glMatrix.mat4.fromTranslation(translate, [tx, ty, tz]);
+      glMatrix.mat4.multiply(model, translate, scale);
+
+      const modelViewProj = glMatrix.mat4.create();
+      glMatrix.mat4.multiply(modelViewProj, finalMatrix, model);
+
+      gl.uniformMatrix4fv(verticesTransformUniformPointer, false, modelViewProj);
+      gl.drawArrays(gl.TRIANGLES, 0, 36);
+    }
+
+    function getCameraPosition() {
+      const dist = parseFloat(document.getElementById("camOrthoDistance").value);
+      if (!isAnimating) {
+        const selected = document.querySelector("input[name='camPos']:checked");
+        const map = {
+          "LFT": [-1, -1, 1], "LFB": [-1, -1, -1], "LBT": [-1, 1, 1], "LBB": [-1, 1, -1],
+          "RFT": [1, -1, 1], "RFB": [1, -1, -1], "RBT": [1, 1, 1], "RBB": [1, 1, -1]
+        };
+        return map[selected.value].map(v => v * dist);
+      } else {
+        const x = Math.cos(cameraAngle) * dist;
+        const y = Math.sin(cameraAngle) * dist;
+        const z = 1 + cameraHeight;
+        return [x, y, z];
+      }
+    }
+
+    function drawScene() {
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+      const view = glMatrix.mat4.create();
+      const proj = glMatrix.mat4.create();
+      const final = glMatrix.mat4.create();
+
+      const camPos = getCameraPosition();
+      glMatrix.mat4.lookAt(view, camPos, [0, 0, 0], [0, 0, 1]);
+
+      const fov = parseFloat(document.getElementById("viewAngle").value) * Math.PI / 180;
+      const camDistance = parseFloat(document.getElementById("camOrthoDistance").value);
+      glMatrix.mat4.perspective(proj, fov, 1, 0.001, camDistance * 10);
+      glMatrix.mat4.multiply(final, proj, view);
+
+      // Ρομπότ
+      drawTexturedCube(metalTexture, 4, 6, 2, -3, 0, 0, final);   // πατούσα αριστερή
+      drawTexturedCube(metalTexture, 4, 6, 2, 3, 0, 0, final);    // πατούσα δεξιά
+
+      drawTexturedCube(metalTexture, 4, 3, 10, -3, 1.5, 6, final); // πόδια αριστερά
+      drawTexturedCube(metalTexture, 4, 3, 10,  3, 1.5, 6, final); // πόδια δεξιά
+
+      drawTexturedCube(metalTexture, 10, 6, 12, 0, 1.5, 17, final); // κορμός
+
+      drawTexturedCube(metalTexture, 2, 4, 10, -6, 1.5, 18, final); //χερια αριστερά
+      drawTexturedCube(metalTexture, 2, 4, 10,  6, 1.5, 18, final); //χερια δεξιά
+
+      drawTexturedCube(headTexture, 6, 4, 5, 0, 1.5, 25, final);  // Κεφάλι
+    }
+
+    function animate() {
+      if (!isAnimating) return;
+      cameraAngle += 0.02;
+      cameraHeight += 0.02 * heightDirection;
+      if (cameraHeight > 2) heightDirection = -1;
+      if (cameraHeight < 0) heightDirection = 1;
+      drawScene();
+      animationFrameId = requestAnimationFrame(animate);
+    }
+
+    function startAnimation() {
+      if (!isAnimating) {
+        isAnimating = true;
+        animate();
+      }
+    }
+
+    function stopAnimation() {
+      isAnimating = false;
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+      drawScene();
+    }
+
+    function main() {
+      canvas = document.getElementById("sceneCanvas");
+      const size = Math.min(window.innerWidth, window.innerHeight) * 0.9;
+      canvas.width = size;
+      canvas.height = size;
+
+      gl = WebGLDebugUtils.makeDebugContext(createGLContext(canvas));
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.clearColor(0.1, 0.1, 0.1, 1);
+      gl.enable(gl.DEPTH_TEST);
+
+      initShaders();
+      initBuffers();
+      metalTexture = loadTexture("metal.jpg");
+      headTexture = loadTexture("robotHead.jpg");
+      drawScene();
+    }
+  </script>
+</head>
+
+<body onload="main()">
+<canvas id="sceneCanvas"></canvas>
+<div class="controls">
+  <label>Γωνία θέασης (°):<br>
+    <input type="number" id="viewAngle" value="60" onchange="drawScene()">
+  </label><br><br>
+
+  <label>Απόσταση κάμερας:<br>
+    <input type="number" id="camOrthoDistance" value="8" onchange="drawScene()">
+  </label><br><br>
+
+  <fieldset>
+    <legend>Επιλογή Θέσης Κάμερας:</legend>
+    <label><input type="radio" name="camPos" value="LFT" checked> Left-Front-Top</label><br>
+    <label><input type="radio" name="camPos" value="LFB"> Left-Front-Bottom</label><br>
+    <label><input type="radio" name="camPos" value="LBT"> Left-Back-Top</label><br>
+    <label><input type="radio" name="camPos" value="LBB"> Left-Back-Bottom</label><br>
+    <label><input type="radio" name="camPos" value="RFT"> Right-Front-Top</label><br>
+    <label><input type="radio" name="camPos" value="RFB"> Right-Front-Bottom</label><br>
+    <label><input type="radio" name="camPos" value="RBT"> Right-Back-Top</label><br>
+    <label><input type="radio" name="camPos" value="RBB"> Right-Back-Bottom</label>
+  </fieldset><br>
+
+  <button onclick="drawScene()">Επανασχεδίαση</button>
+  <button onclick="startAnimation()">Ξεκίνα Περιστροφή</button>
+  <button onclick="stopAnimation()">Σταμάτα</button>
+</div>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="el">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Κάμερα και Κύβος</title>
+    <script src="gl-matrix-min.js"></script>
+    <script src="webgl-debug.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+
+    <script id="vShader" type="x-shader/x-vertex">
+attribute vec4 aVertexPosition;
+attribute vec4 aVertexColor;
+uniform mat4 uVerticesTransform;
+varying vec4 vColor;
+void main(void) {
+    gl_Position = uVerticesTransform * aVertexPosition;
+    vColor = aVertexColor;
+}
+</script>
+
+    <script id="fShader" type="x-shader/x-fragment">
+precision mediump float;
+varying vec4 vColor;
+void main(void) {
+    gl_FragColor = vColor;
+}
+</script>
+
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: sans-serif;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background: #222;
+        }
+
+        .controls {
+            max-width: 500px;
+            margin: 20px auto;
+        }
+    </style>
+
+    <script>
+        let gl, canvas, shadersProgram;
+        let vertexBuffer, colorBuffer;
+        let vertexPositionAttributePointer, vertexColorAttributePointer, verticesTransformUniformPointer;
+
+        // Animation variables
+        let isAnimating = false;
+        let animationFrameId = null;
+        let cameraAngle = 0;
+        let cameraHeight = 0;
+        let heightDirection = 1;
+
+        function createGLContext(canvas) {
+            return canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+        }
+
+        function createCompileShader(type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                alert("Shader error: " + gl.getShaderInfoLog(shader));
+                return null;
+            }
+            return shader;
+        }
+
+        function initShaders() {
+            const vsSource = document.getElementById("vShader").textContent;
+            const fsSource = document.getElementById("fShader").textContent;
+            const vs = createCompileShader(gl.VERTEX_SHADER, vsSource);
+            const fs = createCompileShader(gl.FRAGMENT_SHADER, fsSource);
+
+            shadersProgram = gl.createProgram();
+            gl.attachShader(shadersProgram, vs);
+            gl.attachShader(shadersProgram, fs);
+            gl.linkProgram(shadersProgram);
+            if (!gl.getProgramParameter(shadersProgram, gl.LINK_STATUS)) {
+                alert("Shader linking failed.");
+            }
+
+            gl.useProgram(shadersProgram);
+            vertexPositionAttributePointer = gl.getAttribLocation(shadersProgram, "aVertexPosition");
+            gl.enableVertexAttribArray(vertexPositionAttributePointer);
+            vertexColorAttributePointer = gl.getAttribLocation(shadersProgram, "aVertexColor");
+            gl.enableVertexAttribArray(vertexColorAttributePointer);
+            verticesTransformUniformPointer = gl.getUniformLocation(shadersProgram, "uVerticesTransform");
+        }
+
+        function initBuffers() {
+            // Ορισμός των vertices για έναν κύβο μοναδιαίων διαστάσεων
+            const vertices = new Float32Array([
+                // Μπροστινή όψη
+                -0.5, -0.5,  0.5, 1,
+                 0.5, -0.5,  0.5, 1,
+                 0.5,  0.5,  0.5, 1,
+                -0.5, -0.5,  0.5, 1,
+                 0.5,  0.5,  0.5, 1,
+                -0.5,  0.5,  0.5, 1,
+
+                // Πίσω όψη
+                -0.5, -0.5, -0.5, 1,
+                -0.5,  0.5, -0.5, 1,
+                 0.5,  0.5, -0.5, 1,
+                -0.5, -0.5, -0.5, 1,
+                 0.5,  0.5, -0.5, 1,
+                 0.5, -0.5, -0.5, 1,
+
+                // Πάνω όψη
+                -0.5,  0.5, -0.5, 1,
+                -0.5,  0.5,  0.5, 1,
+                 0.5,  0.5,  0.5, 1,
+                -0.5,  0.5, -0.5, 1,
+                 0.5,  0.5,  0.5, 1,
+                 0.5,  0.5, -0.5, 1,
+
+                // Κάτω όψη
+                -0.5, -0.5, -0.5, 1,
+                 0.5, -0.5, -0.5, 1,
+                 0.5, -0.5,  0.5, 1,
+                -0.5, -0.5, -0.5, 1,
+                 0.5, -0.5,  0.5, 1,
+                -0.5, -0.5,  0.5, 1,
+
+                // Δεξιά όψη
+                 0.5, -0.5, -0.5, 1,
+                 0.5,  0.5, -0.5, 1,
+                 0.5,  0.5,  0.5, 1,
+                 0.5, -0.5, -0.5, 1,
+                 0.5,  0.5,  0.5, 1,
+                 0.5, -0.5,  0.5, 1,
+
+                // Αριστερή όψη
+                -0.5, -0.5, -0.5, 1,
+                -0.5, -0.5,  0.5, 1,
+                -0.5,  0.5,  0.5, 1,
+                -0.5, -0.5, -0.5, 1,
+                -0.5,  0.5,  0.5, 1,
+                -0.5,  0.5, -0.5, 1,
+            ]);
+
+            vertexBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+            colorBuffer = gl.createBuffer();
+        }
+
+        function drawCube(color, sx, sy, sz, tx, ty, tz, finalMatrix) {
+            // Δημιουργία χρωμάτων για τον κύβο
+            const colors = new Float32Array(Array(36).fill(color).flat());
+            
+            // Ενημέρωση του color buffer
+            gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
+            gl.vertexAttribPointer(vertexColorAttributePointer, 4, gl.FLOAT, false, 0, 0);
+
+            // Μετασχηματισμοί
+            const model = glMatrix.mat4.create();
+            const scale = glMatrix.mat4.create();
+            const translate = glMatrix.mat4.create();
+
+            glMatrix.mat4.fromScaling(scale, [sx, sy, sz]);
+            glMatrix.mat4.fromTranslation(translate, [tx, ty, tz]);
+            glMatrix.mat4.multiply(model, translate, scale);
+
+            const fullMatrix = glMatrix.mat4.create();
+            glMatrix.mat4.multiply(fullMatrix, finalMatrix, model);
+            
+            // Σχεδίαση
+            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+            gl.vertexAttribPointer(vertexPositionAttributePointer, 4, gl.FLOAT, false, 0, 0);
+            gl.uniformMatrix4fv(verticesTransformUniformPointer, false, fullMatrix);
+            gl.drawArrays(gl.TRIANGLES, 0, 36);
+        }
+
+        function getCameraPosition() {
+            const dist = parseFloat(document.getElementById("camOrthoDistance").value);
+            
+            if (!isAnimating) {
+                const selected = document.querySelector("input[name='camPos']:checked");
+                const map = {
+                    "LFT": [-1, -1, 1], "LFB": [-1, -1, -1], "LBT": [-1, 1, 1], "LBB": [-1, 1, -1],
+                    "RFT": [1, -1, 1], "RFB": [1, -1, -1], "RBT": [1, 1, 1], "RBB": [1, 1, -1]
+                };
+                const dir = map[selected.value];
+                return dir.map(v => v * dist);
+            } else {
+                // Calculate spiral camera position
+                const x = Math.cos(cameraAngle) * dist;
+                const y = Math.sin(cameraAngle) * dist;
+                const z = 1 + cameraHeight;
+                return [x, y, z];
+            }
+        }
+
+        function animate() {
+            if (!isAnimating) return;
+
+            // Update camera angle (rotation)
+            cameraAngle += 0.02; // Speed of rotation
+
+            // Update camera height (spiral effect)
+            cameraHeight += 0.02 * heightDirection;
+            if (cameraHeight > 2) heightDirection = -1;
+            if (cameraHeight < 0) heightDirection = 1;
+
+            // Draw the scene
+            drawScene();
+
+            // Continue animation
+            animationFrameId = requestAnimationFrame(animate);
+        }
+
+        function startAnimation() {
+            if (!isAnimating) {
+                isAnimating = true;
+                animate();
+            }
+        }
+
+        function stopAnimation() {
+            isAnimating = false;
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            drawScene(); // Redraw scene one last time
+        }
+
+        function drawScene() {
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+            const viewMatrix = glMatrix.mat4.create();
+            const projectionMatrix = glMatrix.mat4.create();
+            const finalMatrix = glMatrix.mat4.create();
+
+            const camPos = getCameraPosition();
+            glMatrix.mat4.lookAt(viewMatrix, camPos, [0, 0, 0], [0, 0, 1]);
+
+            const fov = parseFloat(document.getElementById("viewAngle").value) * Math.PI / 180;
+            const camDistance = parseFloat(document.getElementById("camOrthoDistance").value);
+            const zFar = camDistance * 10;
+            glMatrix.mat4.perspective(projectionMatrix, fov, 1, 0.001, zFar);
+            glMatrix.mat4.multiply(finalMatrix, projectionMatrix, viewMatrix);
+
+            const darkRed = [0.6, 0.0, 0.0, 1];
+            const yellow = [1.0, 0.8, 0.0, 1];
+
+            // Πατούσες (4×6×2)
+            drawCube(darkRed, 4, 6, 2, -3, 0, 0, finalMatrix);  // αριστερή
+            drawCube(darkRed, 4, 6, 2, 3, 0, 0, finalMatrix);   // δεξιά
+
+            // Πόδια (4×3×10)
+            drawCube(yellow, 4, 3, 10, -3, 1.5, 6, finalMatrix);  // αριστερό
+            drawCube(yellow, 4, 3, 10, 3, 1.5, 6, finalMatrix);   // δεξί
+
+            // Κορμός (10×6×12)
+            drawCube(darkRed, 10, 6, 12, 0, 1.5, 17, finalMatrix);
+
+            // Χέρια (4×4×10)
+            drawCube(yellow, 2, 4, 10, -6, 1.5, 18, finalMatrix);  // αριστερό
+            drawCube(yellow, 2, 4, 10, 6, 1.5, 18, finalMatrix);   // δεξί
+
+            // Κεφάλι (6×4×5)
+            drawCube(yellow, 6, 4, 5, 0, 1.5, 24, finalMatrix);
+        }
+
+        function main() {
+            canvas = document.getElementById("sceneCanvas");
+            const minDim = Math.min(window.innerWidth, window.innerHeight);
+            canvas.width = minDim * 0.9;
+            canvas.height = minDim * 0.9;
+
+            gl = WebGLDebugUtils.makeDebugContext(createGLContext(canvas));
+            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+            gl.clearColor(0.1, 0.1, 0.1, 1);
+            gl.enable(gl.DEPTH_TEST);
+
+            initShaders();
+            initBuffers();
+            drawScene();
+        }
+    </script>
+</head>
+
+<body onload="main()">
+    <div class="container">
+        <canvas id="sceneCanvas"></canvas>
+
+        <div class="controls">
+            <label>Γωνία θέασης (μοίρες):<br>
+                <input type="number" id="viewAngle" value="60" onchange="drawScene()">
+            </label><br><br>
+
+            <label>Απόσταση κάμερας:<br>
+                <input type="number" id="camOrthoDistance" value="8" onchange="drawScene()">
+            </label><br><br>
+
+            <fieldset>
+                <legend>Επιλογή Θέσης Κάμερας:</legend>
+                <label><input type="radio" name="camPos" value="LFT" checked>
+                    Left-Front-Top</label><br>
+                <label><input type="radio" name="camPos" value="LFB">
+                    Left-Front-Bottom</label><br>
+                <label><input type="radio" name="camPos" value="LBT"> Left-Back-Top</label><br>
+                <label><input type="radio" name="camPos" value="LBB">
+                    Left-Back-Bottom</label><br>
+                <label><input type="radio" name="camPos" value="RFT"> Right-Front-Top</label><br>
+                <label><input type="radio" name="camPos" value="RFB">
+                    Right-Front-Bottom</label><br>
+                <label><input type="radio" name="camPos" value="RBT"> Right-Back-Top</label><br>
+                <label><input type="radio" name="camPos" value="RBB"> Right-Back-Bottom</label>
+            </fieldset>
+            <br>
+            <button onclick="drawScene()">Επανασχεδίαση</button>
+            <button onclick="startAnimation()">Έναρξη Περιστροφής</button>
+            <button onclick="stopAnimation()">Παύση Περιστροφής</button>
+        </div>
+    </div>
+</body>
+
+</html>
