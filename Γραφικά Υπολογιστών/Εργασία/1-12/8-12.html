@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="el">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Γραφικά Υπολογιστών - Βήματα 8-12</title>
+    <script src="gl-matrix-min.js"></script>
+    <script src="webgl-debug.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <script id="vShader" type="x-shader/x-vertex">
+attribute vec4 aVertexPosition;
+attribute vec2 aTextureCoordinates;
+uniform mat4 uVerticesTransform;
+varying vec2 vTextureCoordinates;
+void main(void) {
+    gl_Position = uVerticesTransform * aVertexPosition;
+    vTextureCoordinates = aTextureCoordinates;
+}
+</script>
+
+    <script id="fShader" type="x-shader/x-fragment">
+precision mediump float;
+varying vec2 vTextureCoordinates;
+uniform sampler2D uSampler;
+void main(void) {
+    gl_FragColor = texture2D(uSampler, vTextureCoordinates);
+}
+</script>
+
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: sans-serif;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background: #222;
+        }
+
+        .controls {
+            max-width: 500px;
+            margin: 20px auto;
+        }
+    </style>
+
+    <script>
+        let gl, canvas, shadersProgram;
+        let vertexBuffer, textureBuffer;
+        let vertexPositionAttributePointer, textureCoordinatesAttributePointer, verticesTransformUniformPointer;
+        let uSamplerPointer;
+
+        // Textures
+        let metalTexture, faceTexture, skyTexture, floorTexture;
+        let floorVertexBuffer, floorTextureBuffer, skyboxVertexBuffer, skyboxTextureBuffer;
+
+        // Animation variables
+        let isAnimating = false;
+        let animationFrameId = null;
+        let cameraAngle = 0;
+        let cameraHeight = 0;
+        let heightDirection = 1;
+
+        // Mouse controls
+        let mouseDown = false;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        let manualCameraAngle = 0;
+        let manualCameraHeight = 0;
+
+        // Robot animation
+        let rightArmAngle = 0;
+        let leftArmAngle = 0;
+        let headAngle = 0;
+        let rightLegAngle = 0;
+        let leftLegAngle = 0;
+
+        // Animation modes
+        let selectedPart = 'rightArm';
+        let paradeTime = 0;
+        let robotMetalTime = 0;
+        let robotMetalCycles = 0;
+        let robotFallen = false;
+
+        function createGLContext(canvas) {
+            return canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+        }
+
+        function createCompileShader(type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                alert("Shader error: " + gl.getShaderInfoLog(shader));
+                return null;
+            }
+            return shader;
+        }
+
+        function initShaders() {
+            const vsSource = document.getElementById("vShader").textContent;
+            const fsSource = document.getElementById("fShader").textContent;
+            const vs = createCompileShader(gl.VERTEX_SHADER, vsSource);
+            const fs = createCompileShader(gl.FRAGMENT_SHADER, fsSource);
+
+            shadersProgram = gl.createProgram();
+            gl.attachShader(shadersProgram, vs);
+            gl.attachShader(shadersProgram, fs);
+            gl.linkProgram(shadersProgram);
+            if (!gl.getProgramParameter(shadersProgram, gl.LINK_STATUS)) {
+                alert("Shader linking failed.");
+            }
+
+            gl.useProgram(shadersProgram);
+            vertexPositionAttributePointer = gl.getAttribLocation(shadersProgram, "aVertexPosition");
+            gl.enableVertexAttribArray(vertexPositionAttributePointer);
+            textureCoordinatesAttributePointer = gl.getAttribLocation(shadersProgram, "aTextureCoordinates");
+            gl.enableVertexAttribArray(textureCoordinatesAttributePointer);
+            verticesTransformUniformPointer = gl.getUniformLocation(shadersProgram, "uVerticesTransform");
+            uSamplerPointer = gl.getUniformLocation(shadersProgram, "uSampler");
+        }
+
+        function preprocessTextureImage(imageURL, textureObject) {
+            var imageObject = new Image();
+            imageObject.crossOrigin = "anonymous";
+            imageObject.onload = function () {
+                gl.bindTexture(gl.TEXTURE_2D, textureObject);
+                gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imageObject);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+                gl.generateMipmap(gl.TEXTURE_2D);
+            };
+            imageObject.src = imageURL;
+        }
+
+        function initBuffers() {
+            // Κύβος vertices
+            const vertices = new Float32Array([
+                // Μπροστινή όψη
+                -0.5, -0.5, 0.5, 1, 0.5, -0.5, 0.5, 1, 0.5, 0.5, 0.5, 1,
+                -0.5, -0.5, 0.5, 1, 0.5, 0.5, 0.5, 1, -0.5, 0.5, 0.5, 1,
+                // Πίσω όψη
+                -0.5, -0.5, -0.5, 1, -0.5, 0.5, -0.5, 1, 0.5, 0.5, -0.5, 1,
+                -0.5, -0.5, -0.5, 1, 0.5, 0.5, -0.5, 1, 0.5, -0.5, -0.5, 1,
+                // Πάνω όψη
+                -0.5, 0.5, -0.5, 1, -0.5, 0.5, 0.5, 1, 0.5, 0.5, 0.5, 1,
+                -0.5, 0.5, -0.5, 1, 0.5, 0.5, 0.5, 1, 0.5, 0.5, -0.5, 1,
+                // Κάτω όψη
+                -0.5, -0.5, -0.5, 1, 0.5, -0.5, -0.5, 1, 0.5, -0.5, 0.5, 1,
+                -0.5, -0.5, -0.5, 1, 0.5, -0.5, 0.5, 1, -0.5, -0.5, 0.5, 1,
+                // Δεξιά όψη
+                0.5, -0.5, -0.5, 1, 0.5, 0.5, -0.5, 1, 0.5, 0.5, 0.5, 1,
+                0.5, -0.5, -0.5, 1, 0.5, 0.5, 0.5, 1, 0.5, -0.5, 0.5, 1,
+                // Αριστερή όψη
+                -0.5, -0.5, -0.5, 1, -0.5, -0.5, 0.5, 1, -0.5, 0.5, 0.5, 1,
+                -0.5, -0.5, -0.5, 1, -0.5, 0.5, 0.5, 1, -0.5, 0.5, -0.5, 1,
+            ]);
+
+            vertexBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+            // Texture coordinates για διαφορετικές όψεις κεφαλιού
+            textureBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
+            var textureCoordinates = [
+                // Μπροστινή όψη - ΠΡΟΣΩΠΟ
+                0.0, 0.5, 0.33, 0.5, 0.33, 1.0, 0.0, 0.5, 0.33, 1.0, 0.0, 1.0,
+                // Πίσω όψη - ΠΙΣΩ ΜΕΡΟΣ
+                0.33, 0.5, 0.66, 0.5, 0.66, 1.0, 0.33, 0.5, 0.66, 1.0, 0.33, 1.0,
+                // Πάνω όψη - ΚΟΡΥΦΗ
+                0.0, 0.0, 0.33, 0.0, 0.33, 0.5, 0.0, 0.0, 0.33, 0.5, 0.0, 0.5,
+                // Κάτω όψη - ΚΑΤΩ
+                0.33, 0.0, 0.66, 0.0, 0.66, 0.5, 0.33, 0.0, 0.66, 0.5, 0.33, 0.5,
+                // Δεξιά όψη - ΔΕΞΙ ΑΥΤΙ
+                0.66, 0.5, 1.0, 0.5, 1.0, 1.0, 0.66, 0.5, 1.0, 1.0, 0.66, 1.0,
+                // Αριστερή όψη - ΑΡΙΣΤΕΡΟ ΑΥΤΙ
+                0.66, 0.0, 1.0, 0.0, 1.0, 0.5, 0.66, 0.0, 1.0, 0.5, 0.66, 0.5
+            ];
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+
+            // Δημιουργία textures
+            metalTexture = gl.createTexture();
+            preprocessTextureImage("metal.png", metalTexture);
+
+
+            // Αποφασίσαμε να σχεδιάσουμε τη μούρη του ρομπότ απευθείας με χρήση canvas,
+            // δημιουργώντας μία υφή που περιλαμβάνει όλες τις πλευρές του κεφαλιού (πρόσωπο, αυτιά, κορυφή κ.λπ.).
+            // Έτσι, αντί για μία απλή εικόνα, σχεδιάσαμε δυναμικά τα χαρακτηριστικά (μάτια, στόμα κ.λπ.),
+            // και τα αντιστοιχίσαμε στις πλευρές του κύβου μέσω UV mapping.      
+            faceTexture = gl.createTexture();
+            createFaceTexture();
+
+            skyTexture = gl.createTexture();
+            createSkyTexture();
+
+            floorTexture = gl.createTexture();
+            preprocessTextureImage("floor.jpg", floorTexture);
+
+            initFloorBuffers();
+            initSkyboxBuffers();
+        }
+
+        function createFaceTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+            const w = 170, h = 256;
+
+            // ΠΙΣΩ ΜΕΡΟΣ (0,256)
+            ctx.fillStyle = '#FFE4B5';
+            ctx.fillRect(0, 256, w, h);
+            ctx.fillStyle = '#000';
+            ctx.font = '20px Arial';
+            ctx.save();
+            ctx.translate(85, 380);
+            ctx.rotate(Math.PI / 2);
+            ctx.fillText('ΠΙΣΩ', -25, 5);
+            ctx.restore();
+
+            // ΠΡΟΣΩΠΟ (170,256)
+            ctx.fillStyle = '#FFE4B5';
+            ctx.fillRect(w, 256, w, h);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(w + 30, 320, 20, 20); // Αριστερό μάτι
+            ctx.fillRect(w + 120, 320, 20, 20); // Δεξί μάτι
+            ctx.fillRect(w + 60, 400, 50, 8); // Στόμα
+            ctx.fillStyle = '#DDD';
+            ctx.fillRect(w + 75, 360, 16, 20); // Μύτη
+
+            // Δεξί αυτί (340,256)
+            ctx.fillStyle = '#FFE4B5';
+            ctx.fillRect(w * 2, 256, w, h);
+            ctx.fillStyle = '#D2691E';
+            ctx.fillRect(w * 2 + 80, 320, 30, 60);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(w * 2 + 90, 325, 10, 20);
+
+            // Κορυφή κεφαλιού (0,0)
+            ctx.fillStyle = '#FFE4B5';
+            ctx.fillRect(0, 0, w, h);
+            ctx.fillStyle = '#8B4513';
+            for (let i = 0; i < 10; i++) {
+                ctx.fillRect(10 + i * 15, 20 + Math.random() * 30, 8, 40);
+            }
+
+            // Κάτω μέρος (170,0)
+            ctx.fillStyle = '#FFE4B5';
+            ctx.fillRect(w, 0, w, h);
+            ctx.fillStyle = '#000';
+            ctx.font = '16px Arial';
+            ctx.fillText('ΚΑΤΩ', w + 60, 100);
+
+            // Αριστερό αυτί (340,0)
+            ctx.fillStyle = '#FFE4B5';
+            ctx.fillRect(w * 2, 0, w, h);
+            ctx.fillStyle = '#D2691E';
+            ctx.fillRect(w * 2 + 80, 60, 30, 60);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(w * 2 + 85, 70, 20, 10);
+
+            gl.bindTexture(gl.TEXTURE_2D, faceTexture);
+            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        }
+
+        function createSkyTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            // Gradient ουρανού
+            const gradient = ctx.createLinearGradient(0, 0, 0, 512);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(1, '#4682B4');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 512, 512);
+
+            // Σύννεφα
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            for (let i = 0; i < 30; i++) {
+                const x = Math.random() * 512;
+                const y = Math.random() * 256;
+                const size = 3 + Math.random() * 8;
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            gl.bindTexture(gl.TEXTURE_2D, skyTexture);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        }
+
+        function initFloorBuffers() {
+            // Floor 60x60 plane
+            const floorVertices = new Float32Array([
+                -30.0, -30.0, 0.0, 1.0, 30.0, -30.0, 0.0, 1.0, 30.0, 30.0, 0.0, 1.0,
+                -30.0, -30.0, 0.0, 1.0, 30.0, 30.0, 0.0, 1.0, -30.0, 30.0, 0.0, 1.0
+            ]);
+
+            floorVertexBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, floorVertexBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, floorVertices, gl.STATIC_DRAW);
+
+            const floorTexCoords = new Float32Array([
+                0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0
+            ]);
+
+            floorTextureBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, floorTextureBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, floorTexCoords, gl.STATIC_DRAW);
+        }
+
+        function initSkyboxBuffers() {
+            // Skybox με ακμή 2000 (size = 1000)
+            const size = 1000;
+            const skyboxVertices = new Float32Array([
+                // Front
+                -size, -size, size, 1.0, size, -size, size, 1.0, size, size, size, 1.0,
+                -size, -size, size, 1.0, size, size, size, 1.0, -size, size, size, 1.0,
+                // Back
+                -size, -size, -size, 1.0, -size, size, -size, 1.0, size, size, -size, 1.0,
+                -size, -size, -size, 1.0, size, size, -size, 1.0, size, -size, -size, 1.0,
+                // Top
+                -size, size, -size, 1.0, -size, size, size, 1.0, size, size, size, 1.0,
+                -size, size, -size, 1.0, size, size, size, 1.0, size, size, -size, 1.0,
+                // Bottom
+                -size, -size, -size, 1.0, size, -size, -size, 1.0, size, -size, size, 1.0,
+                -size, -size, -size, 1.0, size, -size, size, 1.0, -size, -size, size, 1.0,
+                // Right
+                size, -size, -size, 1.0, size, size, -size, 1.0, size, size, size, 1.0,
+                size, -size, -size, 1.0, size, size, size, 1.0, size, -size, size, 1.0,
+                // Left
+                -size, -size, -size, 1.0, -size, -size, size, 1.0, -size, size, size, 1.0,
+                -size, -size, -size, 1.0, -size, size, size, 1.0, -size, size, -size, 1.0
+            ]);
+
+            skyboxVertexBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, skyboxVertexBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, skyboxVertices, gl.STATIC_DRAW);
+
+            const skyboxTexCoords = new Float32Array([
+                0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+                1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0,
+                1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+                1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0
+            ]);
+
+            skyboxTextureBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, skyboxTextureBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, skyboxTexCoords, gl.STATIC_DRAW);
+        }
+
+        function drawRobotPart(useMetalTexture, sx, sy, sz, tx, ty, tz, rotationAngle, rotationAxis, rotationPoint, finalMatrix, robotFallAngle = 0) {
+            if (useMetalTexture) {
+                gl.activeTexture(gl.TEXTURE0);
+                gl.bindTexture(gl.TEXTURE_2D, metalTexture);
+            } else {
+                gl.activeTexture(gl.TEXTURE0);
+                gl.bindTexture(gl.TEXTURE_2D, faceTexture);
+            }
+            gl.uniform1i(uSamplerPointer, 0);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
+            gl.vertexAttribPointer(textureCoordinatesAttributePointer, 2, gl.FLOAT, false, 0, 0);
+
+            const model = glMatrix.mat4.create();
+            const scale = glMatrix.mat4.create();
+            const translate = glMatrix.mat4.create();
+            const rotation = glMatrix.mat4.create();
+            const fallRotation = glMatrix.mat4.create();
+
+            glMatrix.mat4.fromScaling(scale, [sx, sy, sz]);
+            glMatrix.mat4.fromTranslation(translate, [tx, ty, tz]);
+
+            if (rotationAngle !== 0 && rotationAxis && rotationPoint) {
+                const toOrigin = glMatrix.mat4.create();
+                const fromOrigin = glMatrix.mat4.create();
+                glMatrix.mat4.fromTranslation(toOrigin, [-rotationPoint[0], -rotationPoint[1], -rotationPoint[2]]);
+                glMatrix.mat4.fromTranslation(fromOrigin, rotationPoint);
+                glMatrix.mat4.fromRotation(rotation, rotationAngle, rotationAxis);
+
+                glMatrix.mat4.multiply(model, fromOrigin, rotation);
+                glMatrix.mat4.multiply(model, model, toOrigin);
+                glMatrix.mat4.multiply(model, model, translate);
+                glMatrix.mat4.multiply(model, model, scale);
+            } else {
+                glMatrix.mat4.multiply(model, translate, scale);
+            }
+
+            if (robotFallAngle !== 0) {
+                glMatrix.mat4.fromRotation(fallRotation, robotFallAngle, [1, 0, 0]);
+                glMatrix.mat4.multiply(model, fallRotation, model);
+            }
+
+            const fullMatrix = glMatrix.mat4.create();
+            glMatrix.mat4.multiply(fullMatrix, finalMatrix, model);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+            gl.vertexAttribPointer(vertexPositionAttributePointer, 4, gl.FLOAT, false, 0, 0);
+            gl.uniformMatrix4fv(verticesTransformUniformPointer, false, fullMatrix);
+            gl.drawArrays(gl.TRIANGLES, 0, 36);
+        }
+
+        function drawFloor(finalMatrix) {
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, floorTexture);
+            gl.uniform1i(uSamplerPointer, 0);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, floorVertexBuffer);
+            gl.vertexAttribPointer(vertexPositionAttributePointer, 4, gl.FLOAT, false, 0, 0);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, floorTextureBuffer);
+            gl.vertexAttribPointer(textureCoordinatesAttributePointer, 2, gl.FLOAT, false, 0, 0);
+
+            gl.uniformMatrix4fv(verticesTransformUniformPointer, false, finalMatrix);
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+        }
+
+        function getCameraPosition() {
+            const dist = parseFloat(document.getElementById("camOrthoDistance").value);
+
+            if (!isAnimating) {
+                const selected = document.querySelector("input[name='camPos']:checked");
+                const map = {
+                    "LFT": [-1, -1, 1], "LFB": [-1, -1, -1], "LBT": [-1, 1, 1], "LBB": [-1, 1, -1],
+                    "RFT": [1, -1, 1], "RFB": [1, -1, -1], "RBT": [1, 1, 1], "RBB": [1, 1, -1]
+                };
+                const dir = map[selected.value];
+                const angle = Math.atan2(dir[1], dir[0]) + manualCameraAngle;
+                const x = Math.cos(angle) * dist;
+                const y = Math.sin(angle) * dist;
+                const z = dir[2] * dist + manualCameraHeight;
+                return [x, y, z];
+            } else {
+                // Orbital camera rotation
+                const elevation = Math.sin(cameraHeight) * 0.5 + 0.3;
+                const horizontalDist = Math.cos(elevation * Math.PI / 2) * dist;
+                const verticalHeight = Math.sin(elevation * Math.PI / 2) * dist;
+
+                const x = Math.cos(cameraAngle) * horizontalDist;
+                const y = Math.sin(cameraAngle) * horizontalDist;
+                const z = 15 + verticalHeight;
+                return [x, y, z];
+            }
+        }
+
+        function setupMouseControls() {
+            canvas.addEventListener('mousedown', function (event) {
+                mouseDown = true;
+                lastMouseX = event.clientX;
+                lastMouseY = event.clientY;
+            });
+
+            canvas.addEventListener('mouseup', function (event) {
+                mouseDown = false;
+            });
+
+            canvas.addEventListener('mousemove', function (event) {
+                if (!mouseDown) return;
+
+                const deltaX = event.clientX - lastMouseX;
+                const deltaY = event.clientY - lastMouseY;
+
+                manualCameraAngle += deltaX * 0.01;
+                manualCameraHeight += deltaY * 0.1;
+
+                lastMouseX = event.clientX;
+                lastMouseY = event.clientY;
+
+                if (!isAnimating) {
+                    drawScene();
+                }
+            });
+
+            canvas.addEventListener('wheel', function (event) {
+                event.preventDefault();
+                const delta = event.deltaY > 0 ? 1 : -1;
+
+                if (selectedPart === 'parade') {
+                    if (!isAnimating) {
+                        paradeTime += delta * 0.1;
+                        updateParadeAnimation();
+                        drawScene();
+                    }
+                } else if (selectedPart === 'robotMetal') {
+                    if (!isAnimating) {
+                        robotMetalTime += delta * 0.1;
+                        updateRobotMetalAnimation();
+                        drawScene();
+                    }
+                } else {
+                    // Individual part control
+                    switch (selectedPart) {
+                        case 'rightArm':
+                            rightArmAngle = Math.max(-Math.PI, Math.min(0, rightArmAngle + delta * 0.1));
+                            break;
+                        case 'leftArm':
+                            leftArmAngle = Math.max(-Math.PI, Math.min(0, leftArmAngle + delta * 0.1));
+                            break;
+                        case 'head':
+                            headAngle = Math.max(-Math.PI / 2, Math.min(0, headAngle + delta * 0.1));
+                            break;
+                        case 'rightLeg':
+                            rightLegAngle = Math.max(-Math.PI / 2, Math.min(0, rightLegAngle + delta * 0.1));
+                            break;
+                        case 'leftLeg':
+                            leftLegAngle = Math.max(-Math.PI / 2, Math.min(0, leftLegAngle + delta * 0.1));
+                            break;
+                    }
+                    if (!isAnimating) {
+                        drawScene();
+                    }
+                }
+            });
+        }
+
+        function updateParadeAnimation() {
+            // Parade: alternating arm-leg combinations
+            const cycle = Math.sin(paradeTime);
+            if (cycle > 0) {
+                rightArmAngle = -Math.PI * Math.abs(cycle);
+                leftLegAngle = -Math.PI / 2 * Math.abs(cycle);
+                leftArmAngle = 0;
+                rightLegAngle = 0;
+            } else {
+                leftArmAngle = -Math.PI * Math.abs(cycle);
+                rightLegAngle = -Math.PI / 2 * Math.abs(cycle);
+                rightArmAngle = 0;
+                leftLegAngle = 0;
+            }
+        }
+
+        function updateRobotMetalAnimation() {
+            if (robotFallen) {
+                return;
+            }
+
+            // Robot Metal: left arm at 45°, right arm rotating, head bobbing
+            leftArmAngle = -Math.PI / 4;
+            rightArmAngle = -Math.PI * Math.sin(robotMetalTime);
+            headAngle = -Math.PI / 4 * (1 + Math.cos(robotMetalTime));
+
+            // Easter egg: robot falls after 5 cycles
+            const currentCycle = Math.floor(robotMetalTime / (2 * Math.PI));
+            if (currentCycle >= 5 && !robotFallen) {
+                robotFallen = true;
+                robotMetalCycles = currentCycle;
+            }
+        }
+
+        function animate() {
+            if (!isAnimating) return;
+
+            cameraAngle += 0.02;
+            cameraHeight += 0.015 * heightDirection;
+            if (cameraHeight > Math.PI) heightDirection = -1;
+            if (cameraHeight < 0) heightDirection = 1;
+
+            if (selectedPart === 'parade') {
+                paradeTime += 0.05;
+                updateParadeAnimation();
+            } else if (selectedPart === 'robotMetal') {
+                robotMetalTime += 0.05;
+                updateRobotMetalAnimation();
+            }
+
+            drawScene();
+            animationFrameId = requestAnimationFrame(animate);
+        }
+
+        function startAnimation() {
+            if (!isAnimating) {
+                isAnimating = true;
+                animate();
+            }
+        }
+
+        function stopAnimation() {
+            isAnimating = false;
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            drawScene();
+        }
+
+        // Υπολογισμός κάμερας και προοπτικής
+        function drawScene() {
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+            const viewMatrix = glMatrix.mat4.create();
+            const projectionMatrix = glMatrix.mat4.create();
+            const finalMatrix = glMatrix.mat4.create();
+
+            const camPos = getCameraPosition();
+            glMatrix.mat4.lookAt(viewMatrix, camPos, [0, 0, 15], [0, 0, 1]);
+
+            const fov = parseFloat(document.getElementById("viewAngle").value) * Math.PI / 180;
+            const camDistance = parseFloat(document.getElementById("camOrthoDistance").value);
+            const zFar = Math.max(camDistance * 10, 5000);
+            glMatrix.mat4.perspective(projectionMatrix, fov, 1, 0.001, zFar);
+            glMatrix.mat4.multiply(finalMatrix, projectionMatrix, viewMatrix);
+
+            // Draw skybox
+            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+            gl.vertexAttribPointer(vertexPositionAttributePointer, 4, gl.FLOAT, false, 0, 0);
+
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, skyTexture);
+            gl.uniform1i(uSamplerPointer, 0);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
+            gl.vertexAttribPointer(textureCoordinatesAttributePointer, 2, gl.FLOAT, false, 0, 0);
+
+            const skyboxMatrix = glMatrix.mat4.create();
+            glMatrix.mat4.fromScaling(skyboxMatrix, [1000, 1000, 1000]);
+            const skyboxFinal = glMatrix.mat4.create();
+            glMatrix.mat4.multiply(skyboxFinal, finalMatrix, skyboxMatrix);
+
+            gl.uniformMatrix4fv(verticesTransformUniformPointer, false, skyboxFinal);
+            gl.drawArrays(gl.TRIANGLES, 0, 36);
+
+            // Draw floor
+            drawFloor(finalMatrix);
+
+            // Calculate robot fall angle and head scaling for easter egg
+            let fallAngle = 0;
+            let headScale = [6, 4, 5];
+            if (robotFallen) {
+                const fallProgress = Math.min(1, (robotMetalTime - robotMetalCycles * 2 * Math.PI) / Math.PI);
+                fallAngle = -Math.PI / 2 * fallProgress;
+
+                const scaleEffect = 1 + Math.sin(robotMetalTime * 2) * 0.5;
+                headScale = [6 * scaleEffect, 4 * scaleEffect, 5 * scaleEffect];
+            }
+
+            // Draw robot parts with correct pivot points
+            // Feet
+            drawRobotPart(true, 4, 6, 2, -3, 0, 1, leftLegAngle, [1, 0, 0], [-3, 1.5, 11], finalMatrix, fallAngle);
+            drawRobotPart(true, 4, 6, 2, 3, 0, 1, rightLegAngle, [1, 0, 0], [3, 1.5, 11], finalMatrix, fallAngle);
+
+            // Legs
+            drawRobotPart(true, 4, 3, 10, -3, 1.5, 6, leftLegAngle, [1, 0, 0], [-3, 1.5, 11], finalMatrix, fallAngle);
+            drawRobotPart(true, 4, 3, 10, 3, 1.5, 6, rightLegAngle, [1, 0, 0], [3, 1.5, 11], finalMatrix, fallAngle);
+
+            // Body
+            drawRobotPart(true, 10, 6, 12, 0, 1.5, 17, 0, null, null, finalMatrix, fallAngle);
+
+            // Arms
+            drawRobotPart(true, 2, 4, 10, -6, 1.5, 18, leftArmAngle, [1, 0, 0], [6, 1.5, 23], finalMatrix, fallAngle);
+            drawRobotPart(true, 2, 4, 10, 6, 1.5, 18, rightArmAngle, [1, 0, 0], [6, 1.5, 23], finalMatrix, fallAngle);
+
+            // Head
+            drawRobotPart(false, headScale[0], headScale[1], headScale[2], 0, 1.5, 24, headAngle, [1, 0, 0], [0, 1.5, 21.5], finalMatrix, fallAngle);
+        }
+
+        function setSelectedPart(part) {
+            selectedPart = part;
+            if (part !== 'parade' && part !== 'robotMetal') {
+                robotFallen = false;
+                robotMetalCycles = 0;
+            }
+        }
+
+        function main() {
+            canvas = document.getElementById("sceneCanvas");
+            const minDim = Math.min(window.innerWidth, window.innerHeight);
+            canvas.width = minDim * 0.9;
+            canvas.height = minDim * 0.9;
+
+            gl = WebGLDebugUtils.makeDebugContext(createGLContext(canvas));
+            gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+            gl.clearColor(0.1, 0.1, 0.1, 1);
+            gl.enable(gl.DEPTH_TEST);
+
+            initShaders();
+            initBuffers();
+            setupMouseControls();
+            drawScene();
+        }
+    </script>
+</head>
+
+<body onload="main()">
+    <div class="container">
+        <canvas id="sceneCanvas"></canvas>
+
+        <div class="controls">
+            <label>Γωνία θέασης (μοίρες):<br>
+                <input type="number" id="viewAngle" value="60" onchange="drawScene()">
+            </label><br><br>
+
+            <label>Απόσταση κάμερας:<br>
+                <input type="number" id="camOrthoDistance" value="30" onchange="drawScene()">
+            </label><br><br>
+
+            <fieldset>
+                <legend>Επιλογή Θέσης Κάμερας:</legend>
+                <label><input type="radio" name="camPos" value="LFT" checked onchange="drawScene()">
+                    Left-Front-Top</label><br>
+                <label><input type="radio" name="camPos" value="LFB" onchange="drawScene()">
+                    Left-Front-Bottom</label><br>
+                <label><input type="radio" name="camPos" value="LBT" onchange="drawScene()">
+                    Left-Back-Top</label><br>
+                <label><input type="radio" name="camPos" value="LBB" onchange="drawScene()">
+                    Left-Back-Bottom</label><br>
+                <label><input type="radio" name="camPos" value="RFT" onchange="drawScene()">
+                    Right-Front-Top</label><br>
+                <label><input type="radio" name="camPos" value="RFB" onchange="drawScene()">
+                    Right-Front-Bottom</label><br>
+                <label><input type="radio" name="camPos" value="RBT" onchange="drawScene()">
+                    Right-Back-Top</label><br>
+                <label><input type="radio" name="camPos" value="RBB" onchange="drawScene()">
+                    Right-Back-Bottom</label>
+            </fieldset>
+
+            <br>
+            <button onclick="drawScene()">Επανασχεδίαση</button>
+            <button onclick="startAnimation()">Έναρξη Περιστροφής</button>
+            <button onclick="stopAnimation()">Παύση Περιστροφής</button>
+
+            <br><br>
+            <fieldset>
+                <legend>Έλεγχος Ρομπότ (με ροδέλα ποντικιού):</legend>
+                <label><input type="radio" name="robotPart" value="rightArm" checked
+                        onchange="setSelectedPart('rightArm')">
+                    Δεξί χέρι</label><br>
+                <label><input type="radio" name="robotPart" value="leftArm" onchange="setSelectedPart('leftArm')">
+                    Αριστερό χέρι</label><br>
+                <label><input type="radio" name="robotPart" value="head" onchange="setSelectedPart('head')">
+                    Κεφάλι</label><br>
+                <label><input type="radio" name="robotPart" value="rightLeg" onchange="setSelectedPart('rightLeg')">
+                    Δεξί πόδι</label><br>
+                <label><input type="radio" name="robotPart" value="leftLeg" onchange="setSelectedPart('leftLeg')">
+                    Αριστερό πόδι</label><br>
+                <label><input type="radio" name="robotPart" value="parade" onchange="setSelectedPart('parade')">
+                    Παρέλαση</label><br>
+                <label><input type="radio" name="robotPart" value="robotMetal" onchange="setSelectedPart('robotMetal')">
+                    Robot Metal</label>
+            </fieldset>
+
+            <br>
+            <div style="font-size: 12px; color: #888;">
+                <strong>Οδηγίες:</strong><br>
+                • Κλικ + σύρσιμο: περιστροφή/ύψος κάμερας<br>
+                • Ροδέλα: κίνηση επιλεγμένου μέρους ρομπότ<br>
+                • Παρέλαση/Robot Metal: αυτόματα με animation ή χειροκίνητα χωρίς<br>
+                • Robot Metal Easter Egg: μετά από 5 κύκλους το ρομπότ πέφτει!
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
