@@ -1,3 +1,8 @@
+<script>
+    import pada from '$lib/images/pada.jpg';
+    import trello from '$lib/images/trello.png';
+</script>
+
 <section id="gaol" class="min-h-screen relative py-20">
     <div class="container mx-auto px-4">
         <div class="max-w-4xl mx-auto text-center">
@@ -82,8 +87,8 @@
 
         <h2 class="text-center text-4xl font-bold my-10">Συνεργασίες</h2>
         <div class="[&_img]:h-[300px] [&_img]:object-cover flex sm:flex-row flex-col sm:flex gap-15 justify-center">
-            <img alt="ΠΑΔΑ" src="/src/lib/images/pada.jpg">
-            <img class="rounded-full" alt="TRELLO" src="/src/lib/images/trello.png">
+            <img alt="ΠΑΔΑ" src={pada}>
+            <img class="rounded-full" alt="TRELLO" src={trello}>
         </div>
 
 

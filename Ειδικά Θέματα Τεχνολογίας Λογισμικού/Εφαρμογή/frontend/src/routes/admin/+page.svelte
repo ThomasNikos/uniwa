@@ -1,8 +1,10 @@
 <script>
     // @ts-nocheck
+    import { base } from '$app/paths';
     import { goto } from '$app/navigation';
     import { writable, get } from 'svelte/store';
     import { authStore } from '$lib/stores/auth';
+    import { getAdminAppointments } from '$lib/utils/demoApi';
     import { onMount } from 'svelte';
 
     let appointments = [];
@@ -10,7 +12,7 @@
     let error = null;
 
 	const handleHome = () => {
-        goto('/');
+        goto(`${base}/`);
     };
 
 
@@ -18,22 +20,12 @@
         const auth = get(authStore);
         if (!auth?.token) {
             console.log(auth);
-            goto('/auth/login');
+            goto(`${base}/auth/login`);
             return;
         }
 
         try {
-            const response = await fetch('http://localhost:3000/api/appointments/admin', {
-                headers: {
-                    'Authorization': `Bearer ${auth.token}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch appointments');
-            }
-
-            appointments = await response.json();
+            appointments = await getAdminAppointments();
         } catch (err) {
             error = err.message;
         } finally {

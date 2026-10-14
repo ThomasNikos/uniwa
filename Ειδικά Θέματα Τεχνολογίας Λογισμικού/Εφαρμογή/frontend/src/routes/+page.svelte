@@ -1,5 +1,6 @@
 <script>
 	import logo from '$lib/images/logo.png';
+	import { base } from '$app/paths';
 	import { goto } from '$app/navigation';
 	import { get } from 'svelte/store';
 	import { authStore } from '$lib/stores/auth';
@@ -9,19 +10,19 @@
 	import Gaol from '$lib/components/Gaol.svelte';
 
 	const handleRegister = () => {
-		goto('/auth/register');
+		goto(`${base}/auth/register`);
 	};
 
 	const handleLogin = () => {
-		goto('/auth/login');
+		goto(`${base}/auth/login`);
 	};
 
 	const handleBook = () => {
-		goto('/book');
+		goto(`${base}/book`);
 	};
 
 	const handleAdminDashboard = () => {
-    goto('/admin');
+    goto(`${base}/admin`);
   };
 
 	// Υποθέτω ότι το authStore περιέχει και το role του χρήστη

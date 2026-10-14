@@ -2,6 +2,7 @@ import { get } from "svelte/store";
 import { authStore } from "$lib/stores/auth";
 import { clearAuth } from "$lib/stores/auth";
 import { goto } from "$app/navigation";
+import { base } from "$app/paths";
 
 
 
@@ -11,7 +12,7 @@ export async function authenticatedFetch(url , options ={}) {
     console.log(auth);
 
     if(!auth?.token){
-        goto('/');
+        goto(`${base}/`);
         throw new Error('No authentication token available');
     }
 

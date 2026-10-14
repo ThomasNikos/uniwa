@@ -1,5 +1,6 @@
 <script>
-	import { enhance } from '$app/forms';
+	import { base } from '$app/paths';
+	import { register } from '$lib/utils/demoApi';
 	import { goto } from '$app/navigation';
 	import { authStore, setAuth } from '$lib/stores/auth';
 	import { get } from 'svelte/store';
@@ -8,7 +9,7 @@
 	onMount(async () => {
 		const auth = get(authStore);
 		if (auth?.token) {
-			goto('/');
+			goto(`${base}/`);
 		}
 	});
 
@@ -23,26 +24,19 @@
 		confirmPassword: ''
 	};
 
-	function handleSubmit() {
-		// @ts-ignore
-		return async ({ result }) => {
-			if (result.type === 'success') {
-				console.log(result);
-				setAuth({
-					token: result.data.token,
-					user: result.data.user
-				});
-				const auth = get(authStore);
-				console.log('\nAuth store : ', auth);
-				goto('/');
-			} else {
-				alert('Login Failed!');
-			}
-		};
+	async function handleSubmit() {
+		error = '';
+		try {
+			setAuth(await register(user));
+			goto(`${base}/`);
+		} catch (err) {
+			// @ts-ignore
+			error = err.message || 'Registration failed';
+		}
 	}
 
 	function goToHome() {
-		goto('/');
+		goto(`${base}/`);
 	}
 </script>
 
@@ -61,7 +55,7 @@
 	<div class="bg-[#FAF3DD] p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
 		<h1 class="text-center text-[#696D7D] text-2xl font-semibold mb-6">Create Your Account</h1>
 
-		<form method="post" use:enhance={handleSubmit}>
+		<form on:submit|preventDefault={handleSubmit}>
 			<div class="mb-4">
 				<label for="username" class="block text-[#696D7D] text-sm mb-1">Username</label>
 				<input
@@ -144,7 +138,7 @@
 			<div class="text-center text-[#696D7D] mb-6">
 				<span>Already have an account?</span>
 				<a
-					href="/auth/login"
+					href="{base}/auth/login"
 					class="ml-2 no-underline text-[#68B0AB] hover:underline hover:opacity-80 transition-all duration-300"
 				>
 					Log in

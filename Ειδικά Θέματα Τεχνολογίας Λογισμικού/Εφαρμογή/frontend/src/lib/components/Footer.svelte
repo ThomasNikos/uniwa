@@ -1,6 +1,7 @@
 <!-- Footer.svelte -->
 <script>
     import {  Facebook , Mail } from 'lucide-svelte';
+    import { base } from '$app/paths';
     import { Instagram } from 'lucide-svelte';
     import { Twitter } from 'lucide-svelte';
     import logo from '$lib/images/logo.png';
@@ -20,16 +21,16 @@
         <div>
           <h3 class="text-xl font-semibold mb-4">Sitemap</h3>
           <nav class="flex flex-col space-y-2">
-            <a href="/" class="text-yellow-500 hover:text-yellow-400">Home</a>
-            <a href="/" class="hover:text-yellow-400">About us</a>
+            <a href="{base}/" class="text-yellow-500 hover:text-yellow-400">Home</a>
+            <a href="{base}/" class="hover:text-yellow-400">About us</a>
             <div class="relative group">
-              <a href="/" class="hover:text-yellow-400">Reviews</a>
+              <a href="{base}/" class="hover:text-yellow-400">Reviews</a>
             </div>
             <div class="relative group">
               <a href="#gaol" class="hover:text-yellow-400">Our Goal</a>
             </div>
-            <a href="/" class="hover:text-yellow-400">Blog</a>
-            <a href="/auth/register" class="hover:text-yellow-400">Sign up</a>
+            <a href="{base}/" class="hover:text-yellow-400">Blog</a>
+            <a href="{base}/auth/register" class="hover:text-yellow-400">Sign up</a>
           </nav>
         </div>
   
@@ -37,16 +38,16 @@
         <div>
           <h3 class="text-xl font-semibold mb-4">Social Media</h3>
           <div class="flex space-x-4">
-            <a href="/" class="hover:text-yellow-400">
+            <a href="{base}/" class="hover:text-yellow-400">
                 <Instagram class="w-6 h-6"/>
             </a>
-            <a href="/" class="hover:text-yellow-400">
+            <a href="{base}/" class="hover:text-yellow-400">
               <Facebook class="w-6 h-6" />
             </a>
-            <a href="/" class="hover:text-yellow-400">
+            <a href="{base}/" class="hover:text-yellow-400">
                 <Twitter class = "w-6 h-6" />
             </a>
-            <a href="/" class="hover:text-yellow-400">
+            <a href="{base}/" class="hover:text-yellow-400">
               <Mail class="w-6 h-6" />
             </a>
           </div>
@@ -68,7 +69,7 @@
   
       <!-- Bottom Section with Privacy Policy -->
       <div class="mt-12 pt-4 border-t border-gray-600 text-center">
-        <a href="/privacy" class="text-sm text-gray-400 hover:text-yellow-400">
+        <a href="{base}/privacy" class="text-sm text-gray-400 hover:text-yellow-400">
           Privacy Policy
         </a>
       </div>

@@ -1,8 +1,10 @@
 <script>
 	// @ts-nocheck
+	import { base } from '$app/paths';
 	import { goto } from '$app/navigation';
 	import { writable, get } from 'svelte/store';
 	import { authStore } from '$lib/stores/auth';
+	import { bookAppointment as bookAppointmentApi } from '$lib/utils/demoApi';
 	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
@@ -39,7 +41,7 @@
 		const auth = get(authStore);
 		if (!auth?.token) {
 			console.log(auth);
-			goto('/auth/login');
+			goto(`${base}/auth/login`);
 		}
 	});
 
@@ -89,21 +91,12 @@
 		};
 
 		try {
-			const response = await fetch('http://localhost:3000/api/appointments', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': `Bearer ${get(authStore).token}`
-				},
-				body: JSON.stringify(appointmentData)
-			});
-
-			const responseData = await response.json();
-			
-			if (!response.ok) {
+			try {
+				await bookAppointmentApi(appointmentData);
+			} catch (err) {
 				// Εμφάνιση μηνύματος σφάλματος
-				showAlertMessage(responseData.error || 'Πρόβλημα με την κράτηση!', 'error');
-				throw new Error(responseData.error || 'Πρόβλημα με την κράτηση!');
+				showAlertMessage(err.message || 'Πρόβλημα με την κράτηση!', 'error');
+				throw err;
 			}
 
 			// Επιτυχής κράτηση
@@ -117,7 +110,7 @@
 	}
 
 	function goToHome() {
-		goto('/');
+		goto(`${base}/`);
 	}
 </script>
 

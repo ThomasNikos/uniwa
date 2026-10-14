@@ -1,5 +1,6 @@
 <script>
-	import { enhance } from '$app/forms';
+	import { base } from '$app/paths';
+	import { login } from '$lib/utils/demoApi';
 	import { goto } from '$app/navigation';
 	import { authStore, setAuth } from '$lib/stores/auth';
 	import { get } from 'svelte/store';
@@ -19,50 +20,30 @@
 		const auth = get(authStore);
 		if (auth?.token) {
 			console.log(auth);
-			goto('/');
+			goto(`${base}/`);
 		}
 	});
 
-	function handleSubmit() {
+	async function handleSubmit() {
 		// Ενεργοποίηση loading κατά την υποβολή
 		isLoading = true;
 		// Καθαρισμός τυχόν προηγούμενου μηνύματος σφάλματος
 		errorMessage = '';
-		
-		// @ts-ignore
-		return async ({ result }) => {
+
+		try {
+			setAuth(await login(user));
+			goto(`${base}/`);
+		} catch (err) {
+			// @ts-ignore
+			errorMessage = err.message || 'Παρουσιάστηκε σφάλμα κατά τη σύνδεση';
+		} finally {
 			// Απενεργοποίηση loading όταν λάβουμε απάντηση
 			isLoading = false;
-			
-			if (result.type === 'success') {
-				console.log(result);
-				setAuth({
-					token: result.data.token,
-					user: result.data.user
-				});
-				const auth = get(authStore);
-				console.log('\nAuth store : ', auth);
-				goto('/');
-			} else if (result.type === 'failure') {
-				// Λήψη του μηνύματος σφάλματος από το response
-				if (result.data.message) {
-					// Έλεγχος αν το message είναι αντικείμενο
-					if (typeof result.data.message === 'object') {
-						errorMessage = result.data.message.message || 'Σφάλμα σύνδεσης';
-					} else {
-						errorMessage = result.data.message;
-					}
-				} else {
-					errorMessage = 'Λάθος στοιχεία σύνδεσης';
-				}
-			} else {
-				errorMessage = 'Παρουσιάστηκε σφάλμα κατά τη σύνδεση';
-			}
-		};
+		}
 	}
 
 	function goToHome() {
-		goto('/');
+		goto(`${base}/`);
 	}
 </script>
 
@@ -88,7 +69,7 @@
 			</div>
 		{/if}
 
-		<form method="post" use:enhance={handleSubmit}>
+		<form on:submit|preventDefault={handleSubmit}>
 			<input
 				name="username"
 				type="text"
@@ -114,7 +95,7 @@
 			<div class="text-center text-[#696D7D] mb-6">
 				<span>Δεν έχετε λογαριασμό;</span>
 				<a
-					href="/auth/register"
+					href="{base}/auth/register"
 					class="ml-2 no-underline text-[#68B0AB] hover:underline hover:opacity-80 transition-all duration-300"
 				>
 					Εγγραφή
@@ -142,7 +123,7 @@
 		</form>
 
 		<div class="text-center text-[#696D7D] text-sm mt-4">
-			<a href="/auth/forgot-password" class="text-[#68B0AB] hover:underline hover:opacity-80 transition-all duration-300">
+			<a href="{base}/auth/forgot-password" class="text-[#68B0AB] hover:underline hover:opacity-80 transition-all duration-300">
 				Ξεχάσατε τον κωδικό σας;
 			</a>
 		</div>
