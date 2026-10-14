@@ -1,0 +1,32 @@
+rpcgen rpc.x
+
+
+
+gcc -o socket_client socket_client.c
+
+
+
+gcc -o rpc_client rpc_client.c rpc_clnt.c rpc_xdr.c
+
+
+
+gcc -o rpc_server rpc_server.c rpc_svc.c rpc_xdr.c
+
+
+
+./rpc_server
+
+
+
+./rpc_client
+
+
+
+./socket_client 124 1298 2 (πολλαπλασιασμός)
+
+
+
+./socket_client 1238899 23466 1 (πρόσθεση)
+
+
+

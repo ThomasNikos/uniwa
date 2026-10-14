@@ -1,0 +1,13 @@
+netstat -an|grep 6060 //port 6060 being used
+telnet 0.0.0.0 6060 //connect to 0.0.0.0:6060
+netstat -tulpn|grep 53 //dns server
+
+./client 0.0.0.0 //Run client
+
+Stream Sockets    
+  TCP
+While connected, connection way stays the same. (Packets)
+
+Datagram 
+  UDP
+While connected, connection way does not stay the same. (Packets)
