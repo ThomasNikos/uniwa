@@ -1,0 +1,41 @@
+name: Deploy README to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths: [README.md, .github/workflows/pages.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: README.md
+          sparse-checkout-cone-mode: false
+      - name: Render README
+        run: |
+          mkdir -p _site
+          {
+            echo '<!doctype html><html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Uniwa</title>'
+            echo '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.5.1/github-markdown.min.css">'
+            echo '<style>body{max-width:900px;margin:0 auto;padding:32px 16px}</style></head><body class="markdown-body">'
+            npx -y marked@12.0.2 -i README.md --gfm
+            echo '</body></html>'
+          } > _site/index.html
+      - uses: actions/upload-pages-artifact@v3
+      - id: deployment
+        uses: actions/deploy-pages@v4
